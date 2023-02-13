@@ -1,42 +1,36 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"
 import { AppBar, Box, Container, IconButton, Toolbar, Typography, Menu, MenuItem, Button } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import LoginIcon from '@mui/icons-material/Login';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import HowToRegRoundedIcon from '@mui/icons-material/HowToRegRounded';
-
-
-const styles = {
-    backgroundColor: "#dddddd",
-    color: "#333333",
-  
-};
-
-const loggedOutLinks = [
-    {
-        title: "Home",
-        icon: <HomeRoundedIcon />
-    },
-    {
-        title: "Dashboard",
-        icon: <DashboardRoundedIcon />
-    },
-    {
-        title: "Login",
-        icon: <LoginIcon />
-    },
-    {
-        title: "Sign up",
-        icon: <HowToRegRoundedIcon />
-    }
-
-];
-
 
 
 const NavBar = () => {
 
+    const styles = {
+        backgroundColor: "#dddddd",
+        color: "#333333",
+
+    };
+
+    const navItems = [
+        {
+            title: "Home",
+            link: "/"
+        },
+        {
+            title: "Dashboard",
+            link: "dashboard"
+        },
+        {
+            title: "Login",
+            link: "login"
+        },
+        {
+            title: "Sign up",
+            link: "register"
+        }
+
+    ];
 
     const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -48,8 +42,10 @@ const NavBar = () => {
         setAnchorElNav(null);
     }
 
+    const navigate = useNavigate()
+
     return (
-        <AppBar style={{
+        <AppBar position="static" style={{
             backgroundColor: styles.backgroundColor,
             color: styles.color
         }}>
@@ -96,29 +92,53 @@ const NavBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {loggedOutLinks.map((link) => (
-                                <MenuItem key={link.title} onClick={handleCloseNavMenu}>
-                                   {link.icon}
-                                    <Typography textAlign="center">
-                                        {link.title}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
+                            {navItems.map((link) => {
+                                return (
+                                    <Link
+                                        key={link.title}
+                                        style={{
+                                            textDecoration: "none",
+                                            color: styles.color
+                                        }}
+                                        to={link.link}
+                                    >
+
+                                        <MenuItem
+                                            onClick={handleCloseNavMenu}>
+
+                                            <Typography textAlign="center">
+                                                {link.title}
+                                            </Typography>
+                                        </MenuItem>
+
+                                    </Link>
+                                )
+
+                            })}
                         </Menu>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        {loggedOutLinks.map((link) => (
-                   
-                          
-                            <Button
-                                key={link.title}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: styles.color, display: 'block' }}
-                            >
-                                 {link.icon} {link.title}
-                            </Button>
-                        
-                        ))}
+                        {navItems.map((link) => {
+
+                            return (
+                                <Link
+                                    key={link.title}
+                                    style={{
+                                        textDecoration: "none",
+                                    }}
+                                    to={link.link}
+                                >
+                                    <Button
+                                        key={link.title}
+                                        onClick={handleCloseNavMenu}
+                                        sx={{ my: 2, color: styles.color, display: 'block' }}
+                                    >
+                                        {link.title}
+                                    </Button>
+                                </Link>
+                            )
+
+                        })}
                     </Box>
 
                 </Toolbar>
