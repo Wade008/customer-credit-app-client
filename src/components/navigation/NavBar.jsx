@@ -2,9 +2,38 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { AppBar, Box, Container, IconButton, Toolbar, Typography, Menu, MenuItem, Button } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import { useGlobalContext } from "../utils/globalStateContext";
 
 
 const NavBar = () => {
+
+
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const { store, dispatch } = useGlobalContext()
+
+
+    // for testing only
+    const handleLogin = () => {
+        dispatch({
+            type: "setUserName",
+            data: "doolanw",
+        })
+        dispatch({
+            type: "setToken",
+            data: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        })
+    }
+
+    const handleLogout = () => {
+        dispatch({
+            type: "setUserName",
+            data: "",
+        })
+        dispatch({
+            type: "setToken",
+            data: "",
+        })
+    }
 
     const styles = {
         backgroundColor: "#dddddd",
@@ -20,7 +49,10 @@ const NavBar = () => {
         {
             title: "Dashboard",
             link: "dashboard"
-        },
+        }
+    ];
+
+    const navItemsOut = [
         {
             title: "Login",
             link: "login"
@@ -29,10 +61,24 @@ const NavBar = () => {
             title: "Sign up",
             link: "register"
         }
-
     ];
 
-    const [anchorElNav, setAnchorElNav] = useState(null);
+    const navItemsIn = [
+        {
+            title: "Profile",
+            link: "dashboard/profile"
+        },
+        {
+            title: "Categories",
+            link: "dashboard/categories"
+        },
+        {
+            title: "Logout",
+            link: "logout"
+        },
+
+    ]
+
 
     const handleOpenNavMenu = (e) => {
         setAnchorElNav(e.currentTarget);
@@ -42,8 +88,6 @@ const NavBar = () => {
         setAnchorElNav(null);
     }
 
-    const navigate = useNavigate()
-
     return (
         <AppBar position="static" style={{
             backgroundColor: styles.backgroundColor,
@@ -51,6 +95,7 @@ const NavBar = () => {
         }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
+
                     <Typography
                         variant="h6"
                         // component="h1"
@@ -59,8 +104,12 @@ const NavBar = () => {
                             flexGrow: 1
                         }}
                     >
-                        Customer Credit
+                        <Link style={{
+                            textDecoration: "none",
+                            color: styles.color
+                        }} to="/">Customer Credit</Link>
                     </Typography>
+
 
                     <Box sx={{ mr: 1, display: { xs: "flex", md: "none" } }}>
                         <IconButton
@@ -92,6 +141,7 @@ const NavBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
+
                             {navItems.map((link) => {
                                 return (
                                     <Link
@@ -106,6 +156,7 @@ const NavBar = () => {
                                         <MenuItem
                                             onClick={handleCloseNavMenu}>
 
+
                                             <Typography textAlign="center">
                                                 {link.title}
                                             </Typography>
@@ -115,6 +166,61 @@ const NavBar = () => {
                                 )
 
                             })}
+
+                            {!store.userName ? (
+                                navItemsOut.map((link) => {
+                                    return (
+                                        <Link
+                                            key={link.title}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: styles.color
+                                            }}
+                                            to={link.link}
+                                        >
+                                            <MenuItem
+                                                onClick={() => {
+                                                    handleCloseNavMenu();
+                                                    handleLogin();
+                                                }
+                                                }>
+                                                <Typography textAlign="center" sx={{ color: styles.color }}>
+                                                    {link.title}
+                                                </Typography>
+                                            </MenuItem>
+                                        </Link>
+                                    )
+
+                                })
+
+                            ) : (
+                                navItemsIn.map((link) => {
+
+                                    return (
+                                        <Link
+                                            key={link.title}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: styles.color
+                                            }}
+                                            to={link.link}
+                                        >
+                                            <MenuItem
+                                                onClick={() => {
+                                                    handleCloseNavMenu();
+                                                    handleLogout();
+                                                }}>
+                                                <Typography textAlign="center" sx={{ color: styles.color }}>
+                                                    {link.title}
+                                                </Typography>
+                                            </MenuItem>
+                                        </Link>
+                                    )
+
+                                })
+
+                            )}
+
                         </Menu>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -138,7 +244,69 @@ const NavBar = () => {
                                 </Link>
                             )
 
-                        })}
+                        })
+
+                        }
+                        {!store.userName ? (
+
+                            navItemsOut.map((link) => {
+
+                                return (
+                                    <Link
+                                        key={link.title}
+                                        style={{
+                                            textDecoration: "none",
+                                        }}
+                                        to={link.link}
+                                    >
+                                        <Button
+                                            key={link.title}
+                                            onClick={() => {
+                                                handleCloseNavMenu();
+                                                handleLogin();
+                                            }}
+                                            sx={{ my: 2, color: styles.color, display: 'block' }}
+                                        >
+                                            {link.title}
+                                        </Button>
+                                    </Link>
+                                )
+
+                            })
+
+
+
+                        ) : (
+
+                            navItemsIn.map((link) => {
+
+                                return (
+                                    <Link
+                                        key={link.title}
+                                        style={{
+                                            textDecoration: "none",
+                                        }}
+                                        to={link.link}
+                                    >
+                                        <Button
+                                            key={link.title}
+                                            onClick={() => {
+                                                handleCloseNavMenu();
+                                                handleLogout();
+                                            }}
+                                            sx={{ my: 2, color: styles.color, display: 'block' }}
+                                        >
+                                            {link.title}
+                                        </Button>
+                                    </Link>
+                                )
+
+                            })
+
+                        )
+
+                        }
+
                     </Box>
 
                 </Toolbar>

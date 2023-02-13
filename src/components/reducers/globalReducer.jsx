@@ -7,11 +7,11 @@ function globalReducer(state, action) {
                 token: action.data
             }
         }
-        case 'setLoggedInUserName': {
+        case 'setUserName': {
             localStorage.setItem("username", action.data || "")
             return {
                 ...state,
-                loggedInUserName: action.data
+                userName: action.data
             }
         }
         default:
