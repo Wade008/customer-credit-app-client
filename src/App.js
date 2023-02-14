@@ -1,25 +1,77 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { useReducer, useState } from "react";
+
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Outlet,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+
+import NavBar from "./components/navigation/NavBar";
+import Home from "./components/Home";
+import Dashboard from "./components/Dashboard";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import NotFound from "./components/NotFound";
+import Profile from "./components/Profile";
+import Categories from "./components/Categories";
+import Logout from "./components/Logout";
+
+import { GlobalContext } from "./components/utils/globalStateContext";
+import globalReducer from "./components/reducers/globalReducer";
 
 function App() {
+
+
+  const initialState = {
+    userName: "",
+    token: "",
+  }
+
+  const [store, dispatch] = useReducer(globalReducer, initialState)
+
+
+
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route
+        path="/" element={<Main />} errorElement={<NotFound />} >
+        <Route path="/" element={<Home />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard/profile" element={<Profile />} />
+        <Route path="dashboard/categories" element={<Categories />} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="logout" element={<Logout />} />
+      </Route >
+    )
+  )
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <div>
+      <GlobalContext.Provider value={{ store, dispatch }}>
+        <RouterProvider router={router} />
+      </GlobalContext.Provider>
     </div>
+
   );
 }
+
+function Main() {
+  return (
+    <>
+      <NavBar />
+      <Outlet />
+    </>
+  )
+}
+
+
+
 
 export default App;
