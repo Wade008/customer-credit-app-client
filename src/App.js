@@ -21,6 +21,8 @@ import Logout from "./components/Logout";
 
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
+import Global from "./components/styled/Global";
+
 
 function App() {
 
@@ -55,6 +57,7 @@ function App() {
 
     <div>
       <GlobalContext.Provider value={{ store, dispatch }}>
+        <Global />
         <RouterProvider router={router} />
       </GlobalContext.Provider>
     </div>
