@@ -6,8 +6,11 @@ export const Global = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+  
+ 
   }
-  :root {
+  /* :root {
       font-size: ${px2vw(38)};
 
       @media (min-width: 768px) {
@@ -17,7 +20,7 @@ export const Global = createGlobalStyle`
       @media (min-width: 1024px) {
         font-size: ${px2vw(18)};
       }
-    }
+    } */
 `;
 
 export default Global;

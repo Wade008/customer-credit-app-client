@@ -27,7 +27,7 @@ export const Box = styled.div`
   height: 100%;
 
   @media (min-width: 768px) {
-    width: ${px2vw(320, 768)};
+    width: ${px2vw(355, 768)};
     min-height: ${px2vw(200, 768)};
     height: 100%;
   }
@@ -41,12 +41,42 @@ export const Box = styled.div`
 
 export const HomeBackground = styled.section`
     background: #37517E;
-    height: 100vh;
+    position: relative;
+    min-height: 95vh;
    
 `
 
 export const Title = styled.h1`
     color: white;
     text-align: center;
+    font-size: 40px;
+    margin-top: 30px;
+
+
+`
+export const Description = styled.p`
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 30px;
+
+`
+
+export const FooterStyle = styled.div`
+    background: #37517E;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 5rem;
+ 
+
+    p {
+      font-size: 1rem;
+      color: #FFFFFF;
+      text-align: center;
+      margin-top: 10px;
+      
+    }
+
 `
 
