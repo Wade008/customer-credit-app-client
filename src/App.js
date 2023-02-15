@@ -18,6 +18,7 @@ import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
 import Categories from "./components/Categories";
 import Logout from "./components/Logout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
@@ -42,12 +43,16 @@ function App() {
       <Route
         path="/" element={<Main />} errorElement={<NotFound />} >
         <Route path="/" element={<Home />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="dashboard/profile" element={<Profile />} />
-        <Route path="dashboard/categories" element={<Categories />} />
-        <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         <Route path="logout" element={<Logout />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard/profile" element={<Profile />} />
+          <Route path="dashboard/categories" element={<Categories />} />
+        </Route>
+
+
       </Route >
     )
   )
