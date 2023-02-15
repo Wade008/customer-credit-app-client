@@ -6,11 +6,11 @@ export const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 0 ${px2vw(32)} ${px2vw(32)} ${px2vw(32)};
-   
+    margin:0 ${px2vw(30)} ${px2vw(30) };
+    padding-top: 50px;
     max-width: 100%;
    
-
+   
     @media (min-width: 1024px) {
     flex-wrap: nowrap;
   }
@@ -37,14 +37,29 @@ export const Box = styled.div`
     min-height: ${px2vw(300)};
     height: 100%;
   }
-`;
+`
+
+
+
+
+
 
 export const HomeBackground = styled.section`
     background: #37517E;
     position: relative;
-    min-height: 95vh;
+    min-height: 100vh;
    
 `
+
+
+export const MultiBackground = styled.section`
+    background: #dddddd;
+    position: relative;
+    min-height: 100vh;
+
+
+`
+
 
 export const Title = styled.h1`
     color: white;
@@ -52,8 +67,18 @@ export const Title = styled.h1`
     font-size: 40px;
     margin-top: 30px;
 
+`
+export const MultiTitle = styled.h1`
+    color: #333333;
+    text-align: center;
+    font-size: 40px;
+    margin-top: 100px;
+    
 
 `
+
+
+
 export const Description = styled.p`
     color: white;
     text-align: center;
@@ -67,7 +92,9 @@ export const FooterStyle = styled.div`
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 5rem;
+    height: 2.5rem;
+ 
+
  
 
     p {

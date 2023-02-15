@@ -5,7 +5,7 @@ import { FooterStyle } from "./styled/CustomStyles";
 function Footer() {
 
     return (
-        <FooterStyle>
+        <FooterStyle >
             <p>&copy; Customer Credit 2023</p>
 
         </FooterStyle>

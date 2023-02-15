@@ -1,10 +1,10 @@
-
+import {MultiTitle} from "./styled/CustomStyles";
 
 
 function Register() {
 
     return (
-        <h1>Registration page</h1>
+        <MultiTitle>Registration page</MultiTitle>
     )
 
 

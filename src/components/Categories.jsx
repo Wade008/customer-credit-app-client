@@ -1,9 +1,10 @@
 
+import {MultiTitle} from "./styled/CustomStyles";
 
 function Categories() {
 
     return (
-        <h1>Categories component</h1>
+        <MultiTitle>Categories component</MultiTitle>
     )
 
 
