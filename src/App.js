@@ -16,8 +16,10 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
-import Categories from "./components/Categories";
 import Logout from "./components/Logout";
+import NewCustomer from "./components/NewCustomer";
+import FindCustomer from "./components/FindCustomer";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import { GlobalContext } from "./components/utils/globalStateContext";
@@ -35,9 +37,6 @@ function App() {
 
   const [store, dispatch] = useReducer(globalReducer, initialState)
 
-
-
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
@@ -49,7 +48,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard/profile" element={<Profile />} />
-          <Route path="dashboard/categories" element={<Categories />} />
+          <Route path="dashboard/addcustomer" element={<NewCustomer />} />
+          <Route path="dashboard/findcustomer" element={<FindCustomer />} />
         </Route>
 
 

@@ -1,9 +1,10 @@
 
+import { MultiTitle } from "./styled/CustomStyles";
 
 function Login() {
 
     return (
-        <h1>Login page</h1>
+        <MultiTitle>Login page</MultiTitle>
     )
 
 

@@ -1,9 +1,9 @@
-
+import { MultiTitle } from "./styled/CustomStyles";
 
 function Profile() {
 
     return (
-        <h1>Profile component</h1>
+        <MultiTitle>Profile component</MultiTitle>
     )
 
 

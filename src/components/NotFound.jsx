@@ -1,10 +1,10 @@
 
-
+import {MultiTitle} from "./styled/CustomStyles";
 
 function NotFound() {
 
     return (
-        <h1>Error, page not found</h1>
+        <MultiTitle>Error, page not found</MultiTitle>
     )
 
 

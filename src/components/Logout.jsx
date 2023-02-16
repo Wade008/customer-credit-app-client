@@ -1,8 +1,9 @@
+import { MultiTitle } from "./styled/CustomStyles";
 
 function Logout() {
 
     return (
-        <h1>Logout component</h1>
+        <MultiTitle>Logout component</MultiTitle>
     )
 
 

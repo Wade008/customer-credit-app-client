@@ -92,14 +92,14 @@ const NavBar = () => {
              }
 
         },
-        {
-            title: "Categories",
-            link: "dashboard/categories",
-            onClick: () => {
-                handleCloseNavMenu();  
-             }
+        // {
+        //     title: "Categories",
+        //     link: "dashboard/categories",
+        //     onClick: () => {
+        //         handleCloseNavMenu();  
+        //      }
      
-        },
+        // },
         {
             title: "Logout",
             link: "logout",
@@ -122,10 +122,10 @@ const NavBar = () => {
     }
 
     return (
-        <AppBar position="static" style={{
+        <AppBar position="fixed" style={{
             backgroundColor: styles.backgroundColor,
             color: styles.color
-        }}>
+        }} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
 
