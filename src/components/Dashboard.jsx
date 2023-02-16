@@ -64,7 +64,6 @@ function Dashboard() {
     const creditValue = 2;
     const valueString = `The value of one credit point is: $${creditValue}`
 
-    console.log(keyMetrics)
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
         alignItems: 'center',
