@@ -16,7 +16,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
-import Categories from "./components/Categories";
 import Logout from "./components/Logout";
 import NewCustomer from "./components/NewCustomer";
 import FindCustomer from "./components/FindCustomer";
@@ -49,7 +48,6 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="dashboard/profile" element={<Profile />} />
-          <Route path="dashboard/categories" element={<Categories />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer />} />
           <Route path="dashboard/findcustomer" element={<FindCustomer />} />
         </Route>

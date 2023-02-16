@@ -92,14 +92,14 @@ const NavBar = () => {
              }
 
         },
-        {
-            title: "Categories",
-            link: "dashboard/categories",
-            onClick: () => {
-                handleCloseNavMenu();  
-             }
+        // {
+        //     title: "Categories",
+        //     link: "dashboard/categories",
+        //     onClick: () => {
+        //         handleCloseNavMenu();  
+        //      }
      
-        },
+        // },
         {
             title: "Logout",
             link: "logout",

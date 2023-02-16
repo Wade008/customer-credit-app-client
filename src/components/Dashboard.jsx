@@ -19,8 +19,9 @@ import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
-import MultiTitle from "./styled/CustomStyles";
-
+import { MultiBackground } from "./styled/CustomStyles";
+import { keyMetrics } from "./dummydata/dummy";
+import KeyMetrics from "./KeyMetrics";
 
 const drawerWidth = 240;
 
@@ -48,7 +49,9 @@ function Dashboard() {
 
 
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -57,7 +60,11 @@ function Dashboard() {
         setOpen(false);
     };
 
+    const storeName = "Store name";
+    const creditValue = 2;
+    const valueString = `The value of one credit point is: $${creditValue}`
 
+    console.log(keyMetrics)
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
         alignItems: 'center',
@@ -67,6 +74,7 @@ function Dashboard() {
         justifyContent: 'flex-start',
     }));
 
+    
     const menuItems = [
         {
             name: "New customer",
@@ -109,81 +117,74 @@ function Dashboard() {
 
 
     return (
+        <MultiBackground>
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
 
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-
-            <Toolbar sx={{ maxHeight: 200 }}>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    sx={{ mr: 0, ...(open && { display: 'none' }) }}
-                >
-                    <MoreHorizTwoToneIcon />
-                </IconButton>
-            </Toolbar>
-
-
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-
-                }}
-                variant="persistent"
-                anchor="left"
-                open={open}
-            >
-
-                <DrawerHeader sx={{ pt: 10 }}>
-                    <IconButton onClick={handleDrawerClose}>
-                        <CloseTwoToneIcon />
+                <Toolbar sx={{ height: 200 }}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        edge="start"
+                        sx={{ mr: 0, ...(open && { display: 'none' }) }}
+                    >
+                        <MoreHorizTwoToneIcon />
                     </IconButton>
-                </DrawerHeader>
-                <Divider />
-                {drawer}
+                </Toolbar>
 
-            </Drawer>
-            <Main open={open} style={{ overflow: "auto" }}>
-                <DrawerHeader />
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-                    enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-                    imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-                    Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-                    Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                    adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-                    nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-                    leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-                    feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-                    consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                    sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-                    enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-                    imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-                    Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-                    Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                    adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-                    nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-                    leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-                    feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-                    consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                    sapien faucibus et molestie ac.
-                </Typography>
-            </Main>
 
-        </Box>
+                <Drawer
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                        },
 
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
+                >
+
+                    <DrawerHeader sx={{ pt: 10 }}>
+                        <IconButton onClick={handleDrawerClose}>
+                            <CloseTwoToneIcon />
+                        </IconButton>
+                    </DrawerHeader>
+                    <Divider />
+                    {drawer}
+
+                </Drawer>
+                <Main open={open} sx={{ overflowY: "scroll", display:"f;ex", flexWrap:"wrap"}}>
+                    <DrawerHeader />
+                    <Box sx={{ textAlign: 'center', fontSize: "40px", color: "#333333" }}>
+                        {storeName}
+                    </Box>
+                    <Box sx={{ textAlign: 'right', fontSize: "16px", color: "#333333" }}>
+                        {valueString}
+                    </Box>
+                    <Divider />
+                    <Box display="flex" sx={{ flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+                        {keyMetrics.map((metric) => {
+                            return (
+                                <KeyMetrics
+                                    key={metric.title}
+                                    title={metric.title}
+                                    icon={metric.icon}
+                                    value={metric.value}
+                                />
+                            )
+                        })}
+
+
+                    </Box>
+                </Main>
+
+            </Box>
+        </MultiBackground>
     )
 }
 
@@ -191,4 +192,3 @@ function Dashboard() {
 
 export default Dashboard
 
-// width: { sm: `calc(100% - ${drawerWidth}px)` }
