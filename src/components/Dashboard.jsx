@@ -16,12 +16,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
+
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { MultiBackground } from "./styled/CustomStyles";
-import { keyMetrics } from "./dummydata/dummy";
+import { keyMetrics, accountInfo } from "./dummydata/dummy";
 import KeyMetrics from "./KeyMetrics";
+import CustomerList from "./CustomerList";
 
 const drawerWidth = 240;
 
@@ -45,12 +47,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 );
 
 
-function Dashboard() {
+function Dashboard(props) {
 
+    const {customers} = props;
 
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
-
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -60,8 +61,11 @@ function Dashboard() {
         setOpen(false);
     };
 
-    const storeName = "Store name";
-    const creditValue = 2;
+
+    const navigate = useNavigate();
+
+    const storeName = `${accountInfo.companyName} in ${accountInfo.storeSuburd}`;
+    const creditValue = accountInfo.creditValue;
     const valueString = `The value of one credit point is: $${creditValue}`
 
     const DrawerHeader = styled('div')(({ theme }) => ({
@@ -73,7 +77,8 @@ function Dashboard() {
         justifyContent: 'flex-start',
     }));
 
-    
+// MonetizationOnTwoToneIcon 
+
     const menuItems = [
         {
             name: "New customer",
@@ -83,15 +88,14 @@ function Dashboard() {
             }
         },
         {
-            name: "Find a customer",
-            icon: <SearchTwoToneIcon />,
+            name: "Change credit value",
+            icon: <MonetizationOnTwoToneIcon  />,
             onClick: () => {
-                navigate("findcustomer")
+                navigate("creditvalue")
             }
         },
 
     ]
-
 
 
     const drawer = (
@@ -157,7 +161,7 @@ function Dashboard() {
                     {drawer}
 
                 </Drawer>
-                <Main open={open} sx={{ overflowY: "scroll", display:"f;ex", flexWrap:"wrap"}}>
+                <Main open={open} sx={{ overflowY: "scroll", display: "f;ex", flexWrap: "wrap" }}>
                     <DrawerHeader />
                     <Box sx={{ textAlign: 'center', fontSize: "40px", color: "#333333" }}>
                         {storeName}
@@ -180,6 +184,8 @@ function Dashboard() {
 
 
                     </Box>
+                    <Divider sx={{pt:2}}/>
+                    <CustomerList customers={customers}/>
                 </Main>
 
             </Box>

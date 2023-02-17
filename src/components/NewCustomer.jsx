@@ -3,7 +3,6 @@ import { useState } from "react"
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import PersonAddTwoToneIcon from '@mui/icons-material/PersonAddTwoTone';
@@ -17,34 +16,27 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 
 
-function NewCustomer() {
+function NewCustomer(props) {
 
+    const { add } = props;
 
-    const [customer, setCustomer] = useState({
+    const initialFormState = {
         firstname: "",
         lastname: "",
         email: "",
-        phone: ""
-    })
+        phone: "",
+        credit: 0
+    }
 
-    const [customers, setCustomers] = useState([{
-        id: 1,
-        firstname: "Peter",
-        lastname: "Parker",
-        email: "p@p.com",
-        phone: "123456789"
-    },
-    {
-        id: 2,
-        firstname: "Iron",
-        lastname: "Man",
-        email: "IM@2.com",
-        phone: "789456123"
-    },])
+
+
+    const [customer, setCustomer] = useState(initialFormState)
+
 
     const [message, setMessage] = useState(null)
 
     const navigate = useNavigate();
+
 
     const handleFormChange = (e) => {
         setMessage(null)
@@ -60,31 +52,16 @@ function NewCustomer() {
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
-        setCustomers((prevCustomers) => {
-            return [
-                ...prevCustomers,
-                { id: prevCustomers.length + 1, ...customer }
-            ]
-        }
-        );
-        setCustomer({
-            firstname: "",
-            lastname: "",
-            email: "",
-            phone: ""
-        });
+        add(customer)
+
+        setCustomer(initialFormState);
         setMessage("Customer added successfully!")
 
     };
 
     const handleFormClose = () => {
         setMessage(null)
-        setCustomer({
-            firstname: "",
-            lastname: "",
-            email: "",
-            phone: ""
-        })
+        setCustomer(initialFormState)
         navigate("/dashboard");
     }
 
@@ -110,10 +87,10 @@ function NewCustomer() {
                 <Avatar sx={{ m: 1 }}>
                     <PersonAddTwoToneIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                     Add a new customer
                 </Typography>
-                <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} sx={{ mt: 3 }}>
+                <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextValidator
@@ -127,7 +104,7 @@ function NewCustomer() {
                                 autoFocus
                                 onChange={handleFormChange}
                                 validators={['required']}
-                                errorMessages={['this field is required']}
+                                errorMessages={['This field is required']}
 
                             />
                         </Grid>
@@ -142,7 +119,7 @@ function NewCustomer() {
                                 value={customer.lastname}
                                 onChange={handleFormChange}
                                 validators={['required']}
-                                errorMessages={['this field is required']}
+                                errorMessages={['This field is required']}
 
                             />
                         </Grid>
@@ -159,7 +136,7 @@ function NewCustomer() {
                                 value={customer.email}
                                 onChange={handleFormChange}
                                 validators={['required', 'isEmail']}
-                                errorMessages={['this field is required', 'email is not valid']}
+                                errorMessages={['This field is required', 'email is not valid']}
 
                             />
                         </Grid>
@@ -171,8 +148,22 @@ function NewCustomer() {
                                 id="phone"
                                 autoComplete="phone"
                                 value={customer.phone}
-
                                 onChange={handleFormChange}
+                                validators={["matchRegexp:[0-9]$", "maxStringLength:10"]}
+                                errorMessages={["Must be a valid phone number", "Phone number must be 10 digits long"]}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextValidator
+                                fullWidth
+                                name="credit"
+                                label="Add Credit"
+                                id="credit"
+                                autoComplete="credit"
+                                value={customer.credit}
+                                onChange={handleFormChange}
+                                validators={["required", "minNumber:0", "isNumber"]}
+                                errorMessages={["This field is required", "Number must be positive", "Must be an integer"]}
                             />
                         </Grid>
                     </Grid>
