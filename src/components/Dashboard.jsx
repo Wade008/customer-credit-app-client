@@ -13,7 +13,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
@@ -49,7 +48,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Dashboard(props) {
 
-    const {customers} = props;
+    const { customers } = props;
 
     const [open, setOpen] = useState(false);
 
@@ -77,7 +76,7 @@ function Dashboard(props) {
         justifyContent: 'flex-start',
     }));
 
-// MonetizationOnTwoToneIcon 
+    // MonetizationOnTwoToneIcon 
 
     const menuItems = [
         {
@@ -89,7 +88,7 @@ function Dashboard(props) {
         },
         {
             name: "Change credit value",
-            icon: <MonetizationOnTwoToneIcon  />,
+            icon: <MonetizationOnTwoToneIcon />,
             onClick: () => {
                 navigate("creditvalue")
             }
@@ -124,17 +123,6 @@ function Dashboard(props) {
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
 
-                <Toolbar sx={{ height: 200 }}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 0, ...(open && { display: 'none' }) }}
-                    >
-                        <MoreHorizTwoToneIcon />
-                    </IconButton>
-                </Toolbar>
 
 
                 <Drawer
@@ -162,7 +150,18 @@ function Dashboard(props) {
 
                 </Drawer>
                 <Main open={open} sx={{ overflowY: "scroll", display: "f;ex", flexWrap: "wrap" }}>
-                    <DrawerHeader />
+                    <Box sx={{ display: "flex", pt: 6 }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 0, ...(open && { display: 'none' }) }}
+                        >
+                            <MoreHorizTwoToneIcon />
+                        </IconButton>
+                    </Box>
+
                     <Box sx={{ textAlign: 'center', fontSize: "40px", color: "#333333" }}>
                         {storeName}
                     </Box>
@@ -184,8 +183,8 @@ function Dashboard(props) {
 
 
                     </Box>
-                    <Divider sx={{pt:2}}/>
-                    <CustomerList customers={customers}/>
+                    <Divider sx={{ pt: 2 }} />
+                    <CustomerList customers={customers} />
                 </Main>
 
             </Box>

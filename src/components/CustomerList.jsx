@@ -1,6 +1,7 @@
 
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
@@ -12,8 +13,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 import { MultiBackground } from "./styled/CustomStyles";
-import Link from '@mui/material/Link';
+
 
 
 
@@ -21,6 +23,8 @@ function CustomerList(props) {
 
     const [userInput, setUserInput] = useState("");
     const { customers } = props
+
+    const navigate = useNavigate();
 
     const filterCustomer = (e) => {
         setUserInput(e.target.value);
@@ -34,14 +38,6 @@ function CustomerList(props) {
 
     })
 
-    console.log(filteredCustomers)
-
-    // const tableData = () => {
-
-    //     return filteredCustomers ? filteredCustomers : customers
-    // }
-
-
     return (
         <MultiBackground>
 
@@ -51,28 +47,28 @@ function CustomerList(props) {
                 pt: 3,
 
             }} >
-               
-                    <TextField
-                        sx={{ width: "75vw", backgroundColor: "#ffffff" }}
-                        variant="outlined"
-                        margin="normal"
-                        // fullWidth
-                        id="search"
-                        label="Find a customer"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    < SearchTwoToneIcon />
-                                </InputAdornment>
-                            )
 
-                        }}
-                        name="search"
-                        value={userInput}
-                        onChange={filterCustomer}
-                        autoFocus
-                    />
-        
+                <TextField
+                    sx={{ width: "75vw", backgroundColor: "#ffffff" }}
+                    variant="outlined"
+                    margin="normal"
+                    // fullWidth
+                    id="search"
+                    label="Find a customer"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                < SearchTwoToneIcon />
+                            </InputAdornment>
+                        )
+
+                    }}
+                    name="search"
+                    value={userInput}
+                    onChange={filterCustomer}
+                    autoFocus
+                />
+
 
             </Box>
             {filteredCustomers.length > 0 ?
@@ -85,25 +81,34 @@ function CustomerList(props) {
                                 <TableCell align="right">Email</TableCell>
                                 <TableCell align="right">Phone</TableCell>
                                 <TableCell align="right">Available Credit</TableCell>
-                                <TableCell align="right">Update</TableCell>
+
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {filteredCustomers.map((customer) => {
                                 return (
-                                    <TableRow
-                                        key={customer.id}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    <Tooltip key={customer.id} title="Click to update customer" placement="top">
+                                        <TableRow
+                                            key={customer.id}
+                                            sx={{
+                                                '&:last-child td, &:last-child th': { border: 0 }, "&:hover": {
+                                                    cursor: "pointer"
+                                                }
+                                            }}
+                                            onClick={() => {
+                                                navigate(`/dashboard/${customer.id}`)
+                                            }}
 
-                                    >
-                                        <TableCell>{customer.firstname}</TableCell>
-                                        <TableCell>{customer.lastname}</TableCell>
-                                        <TableCell align="right">{customer.email}</TableCell>
-                                        <TableCell align="right">{customer.phone}</TableCell>
-                                        <TableCell align="right">{customer.currentCredit}</TableCell>
-                                        <TableCell align="right"><Link
-                                            variant="caption">update</Link></TableCell>
-                                    </TableRow>
+
+                                        >
+                                            <TableCell >{customer.firstname}</TableCell>
+                                            <TableCell >{customer.lastname}</TableCell>
+                                            <TableCell align="right">{customer.email}</TableCell>
+                                            <TableCell align="right">{customer.phone}</TableCell>
+                                            <TableCell align="right">{customer.currentCredit}</TableCell>
+
+                                        </TableRow>
+                                    </Tooltip>
                                 )
                             })}
 

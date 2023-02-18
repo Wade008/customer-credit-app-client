@@ -68,7 +68,7 @@ function App() {
           <Route path="dashboard/profile" element={<Profile />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer add={addCustomer} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue  />} />
-          <Route path="dashboard/:custId" element={<CustomerDetails  />} />
+          <Route path="dashboard/:custId" element={<CustomerDetails customers={customers} />} />
         </Route>
 
 
