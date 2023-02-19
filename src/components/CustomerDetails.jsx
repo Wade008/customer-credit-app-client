@@ -1,7 +1,6 @@
 
 
 import { useState } from "react";
-import { MultiTitle } from "./styled/CustomStyles";
 import { useParams, useNavigate } from "react-router-dom"
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
@@ -10,7 +9,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import PersonAddTwoToneIcon from '@mui/icons-material/PersonAddTwoTone';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -18,11 +16,13 @@ import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import ManageAccountsTwoToneIcon from '@mui/icons-material/ManageAccountsTwoTone';
 import Tooltip from '@mui/material/Tooltip';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import Autocomplete from '@mui/material/Autocomplete';
+
 
 function CustomerDetails(props) {
     // add state here when axios is added... update state through axios
 
-    const { customers } = props;
+    const { customers, updateCustomer, deleteCustomer } = props;
     const { custId } = useParams()
 
     //use this to set the form state
@@ -30,49 +30,104 @@ function CustomerDetails(props) {
         return String(customer.id) === custId
     })
 
-    let customerDetailsExtra = {
-        ...customerDetails,
-        creditChange: 0
 
+    const currentCustomerBalance = customerDetails.currentCredit;
 
-    }
+    const options = ["Add", "Remove"];
 
-  
-    const [customer, setCustomer] = useState(customerDetailsExtra)
-    const [message, setMessage] = useState(null)
+    const [customer, setCustomer] = useState(customerDetails)
+    const [credit, setCredit] = useState(0);
+    const [value, setValue] = useState(options[0]);
+    const [inputValue, setInputValue] = useState('');
     const navigate = useNavigate();
 
 
+    console.log(customers)
 
     const handleFormChange = (e) => {
-      
-        setMessage(null)
-        setCustomer((prevCustomer) => {
 
-            //add condition here
+        let name = e.target.name
 
-            return {
-                ...prevCustomer,
-                [e.target.name]: e.target.value,
+
+
+        if (name === "creditChange") {
+
+
+            let credit = e.target.value
+            setCredit(credit)
+
+            let updatedCredit = value === "Add" ? Number(currentCustomerBalance) + Number(credit) : Number(currentCustomerBalance) - Number(credit)
+
+            if (credit < 0) {
+
+                credit = 0
 
             }
-        })
+
+            if (updatedCredit < 0) {
+
+                updatedCredit = 0;
+
+            }
+
+            setCustomer((prevCustomer) => {
+                return {
+                    ...prevCustomer,
+                    currentCredit: updatedCredit
+
+                }
+            })
+
+        } else {
+            setCustomer((prevCustomer) => {
+
+                return {
+                    ...prevCustomer,
+                    [e.target.name]: e.target.value,
+
+                }
+            })
+        }
     }
 
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
 
-        // add(customer)
 
-        // setCustomer(initialFormState);
-        // setMessage("Customer added successfully!")
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+
+        // remove creditChange key:value... save as a new object ... add new customer back into customers array in state
+
+        // delete the updateCredit field
+
+        let newCustomer = customer
+
+
+
+        updateCustomer(custId, newCustomer)
+
+
+       navigate("/dashboard",{
+        state: {
+            message: "Customer details successfully updated"
+        }
+    });
+
 
     };
 
+    const handleDelete = (e) => {
+        e.preventDefault();
+        deleteCustomer(custId);
+        navigate("/dashboard",{
+            state: {
+                message: "Customer successfully deleted"
+            }
+        });
+
+    }
 
     const handleFormClose = () => {
-        setMessage(null)
-        // setCustomer(initialFormState)
+
         navigate("/dashboard");
     }
 
@@ -164,25 +219,73 @@ function CustomerDetails(props) {
                                 errorMessages={["Must be a valid phone number", "Phone number must be 10 digits long"]}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <Tooltip title="Use up and down arrows to the right to add or remove credit" placement="top">
+
+                        <Grid item xs={12} sm={5}>
+                            <div>
+                                <Autocomplete
+                                    value={value}
+                                    onChange={(event, newValue) => {
+
+                                        let updatedCreditAuto = newValue === "Add" ? Number(currentCustomerBalance) + Number(credit) : Number(currentCustomerBalance) - Number(credit)
+
+                                        if (updatedCreditAuto < 0) {
+                                            updatedCreditAuto = 0;
+                                        }
+                                        setCustomer((prevCustomer) => {
+                                            return {
+                                                ...prevCustomer,
+                                                currentCredit: updatedCreditAuto
+
+                                            }
+                                        })
+
+                                        setValue(newValue);
+
+
+
+
+                                    }}
+                                    inputValue={inputValue}
+                                    onInputChange={(event, newInputValue) => {
+
+                                        setInputValue(newInputValue);
+
+                                    }}
+
+                                    disableClearable
+                                    fullWidth
+                                    defaultValue={value}
+                                    id="addRemove"
+                                    options={options}
+                                    renderInput={(params) => <TextField name="addRemove"
+                                        {...params} label="Add/Remove"
+                                    />}
+                                />
+                            </div>
+
+                        </Grid>
+
+                        <Grid item xs={12} sm={7}>
+                            <Tooltip title="Enter amount or use arrows" placement="top">
                                 <TextField
-                                    type="number"
+                                    type={"number"}
                                     fullWidth
                                     name="creditChange"
-                                    label="Add or Remove Credit"
+                                    label="Credit Amount to Add or Remove"
                                     id="creditChange"
                                     // autoComplete="phone"
-                                    value={customer.creditChange}
+                                    value={credit}
                                     onChange={handleFormChange}
+
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
+                                    inputProps={{min:0}}
                                 />
                             </Tooltip>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
+                            <TextValidator
                                 fullWidth
                                 disabled
                                 name="currentCredit"
@@ -190,8 +293,8 @@ function CustomerDetails(props) {
                                 id="credit"
                                 value={customer.currentCredit}
                                 onChange={handleFormChange}
-                            // validators={["matchRegexp:[0-9]$", "maxStringLength:10"]}
-                            // errorMessages={["Must be a valid phone number", "Phone number must be 10 digits long"]}
+                               
+
                             />
                         </Grid>
                     </Grid>
@@ -203,12 +306,14 @@ function CustomerDetails(props) {
                     >
                         Update
                     </Button>
-                    {message && <Typography textAlign="center" sx={{ marginTop: 1 }}>
-                        {message}
-                    </Typography>}
                     <Grid container justifyContent="center">
                         <Grid item>
-                            <Link sx={{ color: "red" }} href="#" variant="body2">
+                            <Link
+                                sx={{ color: "red" }}
+                                variant="body2"
+                                component="button"
+                                onClick={handleDelete}
+                            >
                                 Delete Customer
                             </Link>
                         </Grid>

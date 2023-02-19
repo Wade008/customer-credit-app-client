@@ -54,6 +54,35 @@ function App() {
     );
   }
 
+  //update customer
+
+  const updateCustomer = (custId, updatedCustomer) => {
+
+    let newCustomers = customers.map((customer) => {
+      if (String(customer.id) === custId) {
+  
+        return updatedCustomer;
+      }
+      return customer;
+
+    })
+    setCustomers(newCustomers);
+ 
+  }
+
+
+  //delete a customer
+
+  const deleteCustomer = (custId) => {
+
+    let newCustomers = customers.filter((customer) => {
+      return String(customer.id) !== custId
+    })
+
+    setCustomers(newCustomers);
+
+  }
+
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -66,9 +95,13 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard customers={customers} />} />
           <Route path="dashboard/profile" element={<Profile />} />
-          <Route path="dashboard/addcustomer" element={<NewCustomer add={addCustomer} />} />
-          <Route path="dashboard/creditvalue" element={<CreditValue  />} />
-          <Route path="dashboard/:custId" element={<CustomerDetails customers={customers} />} />
+          <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
+          <Route path="dashboard/creditvalue" element={<CreditValue />} />
+          <Route path="dashboard/:custId" element={<CustomerDetails 
+          deleteCustomer={deleteCustomer}
+          updateCustomer={updateCustomer} 
+          customers={customers} />} 
+          />
         </Route>
 
 

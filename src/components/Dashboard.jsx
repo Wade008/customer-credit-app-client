@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -16,7 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
-
+import Tooltip from '@mui/material/Tooltip';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { MultiBackground } from "./styled/CustomStyles";
@@ -62,6 +62,9 @@ function Dashboard(props) {
 
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // console.log(location.state.message)
 
     const storeName = `${accountInfo.companyName} in ${accountInfo.storeSuburd}`;
     const creditValue = accountInfo.creditValue;
@@ -136,7 +139,7 @@ function Dashboard(props) {
 
                     }}
                     variant="persistent"
-                    anchor="left"
+                    // anchor="left"
                     open={open}
                 >
 
@@ -151,15 +154,18 @@ function Dashboard(props) {
                 </Drawer>
                 <Main open={open} sx={{ overflowY: "scroll", display: "f;ex", flexWrap: "wrap" }}>
                     <Box sx={{ display: "flex", pt: 6 }}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            sx={{ mr: 0, ...(open && { display: 'none' }) }}
-                        >
-                            <MoreHorizTwoToneIcon />
-                        </IconButton>
+                        <Tooltip title="Click here to access dashboard menu" placement="right" arrow>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{ mr: 0, ...(open && { display: 'none' }) }}
+                            >
+                                <MoreHorizTwoToneIcon />
+                            </IconButton>
+                        </Tooltip>
+
                     </Box>
 
                     <Box sx={{ textAlign: 'center', fontSize: "40px", color: "#333333" }}>
@@ -184,6 +190,7 @@ function Dashboard(props) {
 
                     </Box>
                     <Divider sx={{ pt: 2 }} />
+                    {location?.state?.message && <Box display="flex"  sx={{ pt:2, flexWrap: 'wrap', justifyContent: 'center' }}><Typography>{location.state.message}</Typography></Box>}
                     <CustomerList customers={customers} />
                 </Main>
 

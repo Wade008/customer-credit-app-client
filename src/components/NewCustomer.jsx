@@ -18,7 +18,7 @@ import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 function NewCustomer(props) {
 
-    const { add } = props;
+    const { addCustomer } = props;
 
     const initialFormState = {
         firstname: "",
@@ -52,7 +52,7 @@ function NewCustomer(props) {
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
-        add(customer)
+        addCustomer(customer)
 
         setCustomer(initialFormState);
         setMessage("Customer added successfully!")
