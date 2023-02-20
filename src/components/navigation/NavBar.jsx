@@ -159,6 +159,7 @@ const NavBar = () => {
                         <Menu
                             id="menu-appbar"
                             anchorEl={anchorElNav}
+                            anchor="left"
                             anchorOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'center',

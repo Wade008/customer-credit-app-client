@@ -27,6 +27,7 @@ import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
 import { customerList } from "./components/dummydata/dummy";
 import CustomerDetails from "./components/CustomerDetails";
+import Message from "./components/Message";
 
 
 function App() {
@@ -94,6 +95,7 @@ function App() {
         <Route path="logout" element={<Logout />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard customers={customers} />} />
+          <Route path="dashboard/message" element={<Message  />} />
           <Route path="dashboard/profile" element={<Profile />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue />} />

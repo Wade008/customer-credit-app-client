@@ -25,21 +25,17 @@ function NewCustomer(props) {
         lastname: "",
         email: "",
         phone: "",
-        credit: 0
+        currentCredit: 0
     }
 
 
 
     const [customer, setCustomer] = useState(initialFormState)
 
-
-    const [message, setMessage] = useState(null)
-
     const navigate = useNavigate();
 
-
     const handleFormChange = (e) => {
-        setMessage(null)
+     
         setCustomer((prevCustomer) => {
             return {
                 ...prevCustomer,
@@ -55,12 +51,16 @@ function NewCustomer(props) {
         addCustomer(customer)
 
         setCustomer(initialFormState);
-        setMessage("Customer added successfully!")
+        navigate("/dashboard/message",{
+            state: {
+                message: "Customer successfully added to the system"
+            }
+        });
+
 
     };
 
     const handleFormClose = () => {
-        setMessage(null)
         setCustomer(initialFormState)
         navigate("/dashboard");
     }
@@ -156,11 +156,11 @@ function NewCustomer(props) {
                         <Grid item xs={12}>
                             <TextValidator
                                 fullWidth
-                                name="credit"
+                                name="currentCredit"
                                 label="Add Credit"
                                 id="credit"
                                 autoComplete="credit"
-                                value={customer.credit}
+                                value={customer.currentCredit}
                                 onChange={handleFormChange}
                                 validators={["required", "minNumber:0", "isNumber"]}
                                 errorMessages={["This field is required", "Number must be positive", "Must be an integer"]}
@@ -175,9 +175,7 @@ function NewCustomer(props) {
                     >
                         Add Customer
                     </Button>
-                    {message && <Typography textAlign="center" sx={{ marginTop: 1 }}>
-                        {message}
-                    </Typography>}
+                   
                 </ValidatorForm>
             </Box>
 

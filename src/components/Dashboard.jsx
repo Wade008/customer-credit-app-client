@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -62,7 +62,7 @@ function Dashboard(props) {
 
 
     const navigate = useNavigate();
-    const location = useLocation();
+
 
     // console.log(location.state.message)
 
@@ -127,7 +127,6 @@ function Dashboard(props) {
                 <CssBaseline />
 
 
-
                 <Drawer
                     sx={{
                         width: drawerWidth,
@@ -139,7 +138,7 @@ function Dashboard(props) {
 
                     }}
                     variant="persistent"
-                    // anchor="left"
+                    anchor="left"
                     open={open}
                 >
 
@@ -152,7 +151,7 @@ function Dashboard(props) {
                     {drawer}
 
                 </Drawer>
-                <Main open={open} sx={{ overflowY: "scroll", display: "f;ex", flexWrap: "wrap" }}>
+                <Main open={open} sx={{ overflowY: "scroll" }}>
                     <Box sx={{ display: "flex", pt: 6 }}>
                         <Tooltip title="Click here to access dashboard menu" placement="right" arrow>
                             <IconButton
@@ -160,7 +159,7 @@ function Dashboard(props) {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 edge="start"
-                                sx={{ mr: 0, ...(open && { display: 'none' }) }}
+                                sx={{ mr: 0, ...(open && { visibility: 'hidden' }) }}
                             >
                                 <MoreHorizTwoToneIcon />
                             </IconButton>
@@ -190,7 +189,7 @@ function Dashboard(props) {
 
                     </Box>
                     <Divider sx={{ pt: 2 }} />
-                    {location?.state?.message && <Box display="flex"  sx={{ pt:2, flexWrap: 'wrap', justifyContent: 'center' }}><Typography>{location.state.message}</Typography></Box>}
+                   
                     <CustomerList customers={customers} />
                 </Main>
 

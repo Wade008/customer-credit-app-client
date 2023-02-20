@@ -106,7 +106,7 @@ function CustomerDetails(props) {
         updateCustomer(custId, newCustomer)
 
 
-       navigate("/dashboard",{
+       navigate("/dashboard/message",{
         state: {
             message: "Customer details successfully updated"
         }
@@ -118,7 +118,7 @@ function CustomerDetails(props) {
     const handleDelete = (e) => {
         e.preventDefault();
         deleteCustomer(custId);
-        navigate("/dashboard",{
+        navigate("/dashboard/message",{
             state: {
                 message: "Customer successfully deleted"
             }
