@@ -13,15 +13,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
+import Tooltip from '@mui/material/Tooltip';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { MultiBackground } from "./styled/CustomStyles";
-import { keyMetrics } from "./dummydata/dummy";
+import { keyMetrics, accountInfo } from "./dummydata/dummy";
 import KeyMetrics from "./KeyMetrics";
+import CustomerList from "./CustomerList";
 
 const drawerWidth = 240;
 
@@ -45,12 +46,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 );
 
 
-function Dashboard() {
+function Dashboard(props) {
 
+    const { customers } = props;
 
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
-
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -60,11 +60,16 @@ function Dashboard() {
         setOpen(false);
     };
 
-    const storeName = "Store name";
-    const creditValue = 2;
+
+    const navigate = useNavigate();
+
+
+    // console.log(location.state.message)
+
+    const storeName = `${accountInfo.companyName} in ${accountInfo.storeSuburd}`;
+    const creditValue = accountInfo.creditValue;
     const valueString = `The value of one credit point is: $${creditValue}`
 
-    console.log(keyMetrics)
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
         alignItems: 'center',
@@ -74,7 +79,8 @@ function Dashboard() {
         justifyContent: 'flex-start',
     }));
 
-    
+    // MonetizationOnTwoToneIcon 
+
     const menuItems = [
         {
             name: "New customer",
@@ -84,15 +90,14 @@ function Dashboard() {
             }
         },
         {
-            name: "Find a customer",
-            icon: <SearchTwoToneIcon />,
+            name: "Change credit value",
+            icon: <MonetizationOnTwoToneIcon />,
             onClick: () => {
-                navigate("findcustomer")
+                navigate("creditvalue")
             }
         },
 
     ]
-
 
 
     const drawer = (
@@ -121,18 +126,6 @@ function Dashboard() {
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
 
-                <Toolbar sx={{ height: 200 }}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 0, ...(open && { display: 'none' }) }}
-                    >
-                        <MoreHorizTwoToneIcon />
-                    </IconButton>
-                </Toolbar>
-
 
                 <Drawer
                     sx={{
@@ -158,8 +151,22 @@ function Dashboard() {
                     {drawer}
 
                 </Drawer>
-                <Main open={open} sx={{ overflowY: "scroll", display:"f;ex", flexWrap:"wrap"}}>
-                    <DrawerHeader />
+                <Main open={open} sx={{ overflowY: "scroll" }}>
+                    <Box sx={{ display: "flex", pt: 6 }}>
+                        <Tooltip title="Click here to access dashboard menu" placement="right" arrow>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{ mr: 0, ...(open && { visibility: 'hidden' }) }}
+                            >
+                                <MoreHorizTwoToneIcon />
+                            </IconButton>
+                        </Tooltip>
+
+                    </Box>
+
                     <Box sx={{ textAlign: 'center', fontSize: "40px", color: "#333333" }}>
                         {storeName}
                     </Box>
@@ -181,6 +188,9 @@ function Dashboard() {
 
 
                     </Box>
+                    <Divider sx={{ pt: 2 }} />
+                   
+                    <CustomerList customers={customers} />
                 </Main>
 
             </Box>

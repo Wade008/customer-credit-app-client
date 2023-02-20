@@ -1,5 +1,5 @@
 
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 import {
   createBrowserRouter,
@@ -18,13 +18,16 @@ import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
 import Logout from "./components/Logout";
 import NewCustomer from "./components/NewCustomer";
-import FindCustomer from "./components/FindCustomer";
+import CreditValue from "./components/CreditValue";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
+import { customerList } from "./components/dummydata/dummy";
+import CustomerDetails from "./components/CustomerDetails";
+import Message from "./components/Message";
 
 
 function App() {
@@ -35,7 +38,52 @@ function App() {
     token: "",
   }
 
+
+  const initialCustomers = customerList
+
   const [store, dispatch] = useReducer(globalReducer, initialState)
+  const [customers, setCustomers] = useState(initialCustomers)
+
+  const addCustomer = (customer) => {
+
+    setCustomers((prevCustomers) => {
+      return [
+        ...prevCustomers,
+        { id: prevCustomers.length + 1, ...customer }
+      ]
+    }
+    );
+  }
+
+  //update customer
+
+  const updateCustomer = (custId, updatedCustomer) => {
+
+    let newCustomers = customers.map((customer) => {
+      if (String(customer.id) === custId) {
+  
+        return updatedCustomer;
+      }
+      return customer;
+
+    })
+    setCustomers(newCustomers);
+ 
+  }
+
+
+  //delete a customer
+
+  const deleteCustomer = (custId) => {
+
+    let newCustomers = customers.filter((customer) => {
+      return String(customer.id) !== custId
+    })
+
+    setCustomers(newCustomers);
+
+  }
+
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -46,10 +94,16 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="logout" element={<Logout />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard customers={customers} />} />
+          <Route path="dashboard/message" element={<Message  />} />
           <Route path="dashboard/profile" element={<Profile />} />
-          <Route path="dashboard/addcustomer" element={<NewCustomer />} />
-          <Route path="dashboard/findcustomer" element={<FindCustomer />} />
+          <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
+          <Route path="dashboard/creditvalue" element={<CreditValue />} />
+          <Route path="dashboard/:custId" element={<CustomerDetails 
+          deleteCustomer={deleteCustomer}
+          updateCustomer={updateCustomer} 
+          customers={customers} />} 
+          />
         </Route>
 
 
