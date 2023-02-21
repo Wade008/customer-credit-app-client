@@ -25,7 +25,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
-import { customerList } from "./components/dummydata/dummy";
+import { customerList, accountInfo } from "./components/dummydata/dummy";
 import CustomerDetails from "./components/CustomerDetails";
 import Message from "./components/Message";
 
@@ -40,9 +40,13 @@ function App() {
 
 
   const initialCustomers = customerList
+  const creditValue = accountInfo.creditValue
 
   const [store, dispatch] = useReducer(globalReducer, initialState)
   const [customers, setCustomers] = useState(initialCustomers)
+  const [storeCredit, setStoreCredit] = useState(creditValue);
+
+
 
   const addCustomer = (customer) => {
 
@@ -61,14 +65,14 @@ function App() {
 
     let newCustomers = customers.map((customer) => {
       if (String(customer.id) === custId) {
-  
+
         return updatedCustomer;
       }
       return customer;
 
     })
     setCustomers(newCustomers);
- 
+
   }
 
 
@@ -83,7 +87,14 @@ function App() {
     setCustomers(newCustomers);
 
   }
+  //update store credit value
 
+  const updateStoreCredit = (newCredit) => {
+
+    setStoreCredit(newCredit);
+  }
+  
+console.log(storeCredit)
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -94,15 +105,19 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="logout" element={<Logout />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="dashboard" element={<Dashboard customers={customers} />} />
-          <Route path="dashboard/message" element={<Message  />} />
+          <Route path="dashboard" element={<Dashboard
+            customers={customers}
+            storeCredit={storeCredit} />} />
+          <Route path="dashboard/message" element={<Message />} />
           <Route path="dashboard/profile" element={<Profile />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
-          <Route path="dashboard/creditvalue" element={<CreditValue />} />
-          <Route path="dashboard/:custId" element={<CustomerDetails 
-          deleteCustomer={deleteCustomer}
-          updateCustomer={updateCustomer} 
-          customers={customers} />} 
+          <Route path="dashboard/creditvalue" element={<CreditValue
+            setCreditValue={updateStoreCredit}
+            storeCredit={storeCredit} />} />
+          <Route path="dashboard/:custId" element={<CustomerDetails
+            deleteCustomer={deleteCustomer}
+            updateCustomer={updateCustomer}
+            customers={customers} />}
           />
         </Route>
 

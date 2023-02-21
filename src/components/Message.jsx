@@ -25,7 +25,7 @@ function Message() {
     return (
 
         <MultiBackground>
-            {location?.state?.message && <Container  sx={{ pt: 15, maxWidth:450}}>
+            {location?.state?.message && <Container  sx={{ pt: 15, width:450}}>
                 <Box sx={{width:50}}>
                     <IconButton onClick={handleExit}>
                         <CloseTwoToneIcon />
