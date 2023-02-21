@@ -48,9 +48,10 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Dashboard(props) {
 
-    const { customers } = props;
+    const { customers, storeCredit } = props;
 
     const [open, setOpen] = useState(false);
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -67,8 +68,8 @@ function Dashboard(props) {
     // console.log(location.state.message)
 
     const storeName = `${accountInfo.companyName} in ${accountInfo.storeSuburd}`;
-    const creditValue = accountInfo.creditValue;
-    const valueString = `The value of one credit point is: $${creditValue}`
+
+    
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -171,7 +172,7 @@ function Dashboard(props) {
                         {storeName}
                     </Box>
                     <Box sx={{ textAlign: 'right', fontSize: "16px", color: "#333333" }}>
-                        {valueString}
+                        The value of one credit point is: ${storeCredit}
                     </Box>
                     <Divider />
                     <Box display="flex" sx={{ flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
@@ -189,7 +190,7 @@ function Dashboard(props) {
 
                     </Box>
                     <Divider sx={{ pt: 2 }} />
-                   
+
                     <CustomerList customers={customers} />
                 </Main>
 

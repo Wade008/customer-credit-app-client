@@ -42,7 +42,7 @@ function CustomerDetails(props) {
     const navigate = useNavigate();
 
 
-    console.log(customers)
+
 
     const handleFormChange = (e) => {
 
