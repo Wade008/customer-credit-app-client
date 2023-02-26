@@ -67,7 +67,7 @@ function Dashboard(props) {
 
     // console.log(location.state.message)
 
-    const storeName = `${accountInfo.companyName} in ${accountInfo.storeSuburd}`;
+    const storeName = `${accountInfo.companyname} in ${accountInfo.storesuburd}`;
 
     
 

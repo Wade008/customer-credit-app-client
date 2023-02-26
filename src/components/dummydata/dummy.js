@@ -27,12 +27,17 @@ export const keyMetrics = [
 
 export const accountInfo = {
 
-    companyName: "Target",
-    storeSuburd: "Mitchelton",
-    firstName: "Captain",
-    LastName: "America",
+    id:1,
+    companyname: "Target",
+    storesuburb: "Mitchelton",
+    firstname: "Captain",
+    lastname: "America",
+    username: "americac",
     email: "ca@world.com",
-    creditValue: 2
+    password: "password4",
+    phone: "1234567891",
+    isAdmin: false,
+    creditvalue: 2
 
 }
 

@@ -13,26 +13,16 @@ const NavBar = () => {
     // let navigate = useNavigate();
 
 
-    // for testing only
-    const handleLogin = () => {
-        dispatch({
-            type: "setUserName",
-            data: "doolanw",
-        })
-        dispatch({
-            type: "setToken",
-            data: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-        })
-    }
+  
 
     const handleLogout = () => {
         dispatch({
             type: "setUserName",
-            data: "",
+            data: null,
         })
         dispatch({
             type: "setToken",
-            data: "",
+            data: null,
         })
     }
 
@@ -68,7 +58,7 @@ const NavBar = () => {
             link: "login",
             onClick: () => {
                 handleCloseNavMenu();  
-                handleLogin(); 
+                // handleLogin(); 
              }
         },
         {
@@ -76,7 +66,7 @@ const NavBar = () => {
             link: "register",
             onClick: () => {
                 handleCloseNavMenu();  
-                handleLogin(); 
+                // handleLogin(); 
              }
             
         }
@@ -102,7 +92,7 @@ const NavBar = () => {
         // },
         {
             title: "Logout",
-            link: "logout",
+            link: "/",
             onClick: () => {
                 handleCloseNavMenu();  
                 handleLogout();

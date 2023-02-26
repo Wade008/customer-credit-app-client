@@ -5,6 +5,8 @@ import { useGlobalContext } from "./utils/globalStateContext"
 function ProtectedRoute() {
     const { store } = useGlobalContext()
 
+    // console.log(store)
+
     if (store.token) {
         return <Outlet />
     } else {

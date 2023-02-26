@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import { useNavigate } from "react-router-dom";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-
+import CustomerForm from "./CustomerForm";
 
 
 
@@ -35,7 +35,7 @@ function NewCustomer(props) {
     const navigate = useNavigate();
 
     const handleFormChange = (e) => {
-     
+
         setCustomer((prevCustomer) => {
             return {
                 ...prevCustomer,
@@ -51,7 +51,7 @@ function NewCustomer(props) {
         addCustomer(customer)
 
         setCustomer(initialFormState);
-        navigate("/dashboard/message",{
+        navigate("/dashboard/message", {
             state: {
                 message: "Customer successfully added to the system"
             }
@@ -92,74 +92,19 @@ function NewCustomer(props) {
                 </Typography>
                 <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextValidator
-                                autoComplete="given-name"
-                                name="firstname"
-                                required
-                                fullWidth
-                                id="firstname"
-                                label="First Name"
-                                value={customer.firstname}
-                                autoFocus
-                                onChange={handleFormChange}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
 
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextValidator
-                                required
-                                fullWidth
-                                id="lastname"
-                                label="Last Name"
-                                name="lastname"
-                                autoComplete="family-name"
-                                value={customer.lastname}
-                                onChange={handleFormChange}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
-
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-
-                            <TextValidator
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="mobile"
-                                value={customer.email}
-                                onChange={handleFormChange}
-                                validators={['required', 'isEmail']}
-                                errorMessages={['This field is required', 'email is not valid']}
-
-                            />
-                        </Grid>
+                        <CustomerForm
+                            customer={customer}
+                            handleFormChange={handleFormChange}
+                        />
                         <Grid item xs={12}>
                             <TextValidator
-                                fullWidth
-                                name="phone"
-                                label="Phone Number"
-                                id="phone"
-                                autoComplete="phone"
-                                value={customer.phone}
-                                onChange={handleFormChange}
-                                validators={["matchRegexp:[0-9]$", "maxStringLength:10"]}
-                                errorMessages={["Must be a valid phone number", "Phone number must be 10 digits long"]}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
+                                required
                                 fullWidth
                                 name="currentCredit"
                                 label="Add Credit"
                                 id="credit"
-                                autoComplete="credit"
+
                                 value={customer.currentCredit}
                                 onChange={handleFormChange}
                                 validators={["required", "minNumber:0", "isNumber"]}
@@ -175,7 +120,7 @@ function NewCustomer(props) {
                     >
                         Add Customer
                     </Button>
-                   
+
                 </ValidatorForm>
             </Box>
 
