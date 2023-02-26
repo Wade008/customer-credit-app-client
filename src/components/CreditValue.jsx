@@ -39,6 +39,12 @@ function CreditValue(props) {
 
         setCreditValue(formValue)
 
+        navigate("/dashboard/message",{
+            state: {
+                message: "Credit value successfully updated"
+            }
+        });
+
     };
 
 
