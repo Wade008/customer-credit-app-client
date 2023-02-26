@@ -17,7 +17,7 @@ import ManageAccountsTwoToneIcon from '@mui/icons-material/ManageAccountsTwoTone
 import Tooltip from '@mui/material/Tooltip';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Autocomplete from '@mui/material/Autocomplete';
-
+import CustomerForm from "./CustomerForm"
 
 function CustomerDetails(props) {
     // add state here when axios is added... update state through axios
@@ -106,11 +106,11 @@ function CustomerDetails(props) {
         updateCustomer(custId, newCustomer)
 
 
-       navigate("/dashboard/message",{
-        state: {
-            message: "Customer details successfully updated"
-        }
-    });
+        navigate("/dashboard/message", {
+            state: {
+                message: "Customer details successfully updated"
+            }
+        });
 
 
     };
@@ -118,7 +118,7 @@ function CustomerDetails(props) {
     const handleDelete = (e) => {
         e.preventDefault();
         deleteCustomer(custId);
-        navigate("/dashboard/message",{
+        navigate("/dashboard/message", {
             state: {
                 message: "Customer successfully deleted"
             }
@@ -158,67 +158,11 @@ function CustomerDetails(props) {
                 </Typography>
                 <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextValidator
-                                autoComplete="given-name"
-                                name="firstname"
-                                required
-                                fullWidth
-                                id="firstname"
-                                label="First Name"
-                                value={customer.firstname}
-                                autoFocus
-                                onChange={handleFormChange}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
 
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextValidator
-                                required
-                                fullWidth
-                                id="lastname"
-                                label="Last Name"
-                                name="lastname"
-                                autoComplete="family-name"
-                                value={customer.lastname}
-                                onChange={handleFormChange}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
-
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-
-                            <TextValidator
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="mobile"
-                                value={customer.email}
-                                onChange={handleFormChange}
-                                validators={['required', 'isEmail']}
-                                errorMessages={['This field is required', 'email is not valid']}
-
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                fullWidth
-                                name="phone"
-                                label="Phone Number"
-                                id="phone"
-                                autoComplete="phone"
-                                value={customer.phone}
-                                onChange={handleFormChange}
-                                validators={["matchRegexp:[0-9]$", "maxStringLength:10"]}
-                                errorMessages={["Must be a valid phone number", "Phone number must be 10 digits long"]}
-                            />
-                        </Grid>
+                        <CustomerForm
+                            customer={customer}
+                            handleFormChange={handleFormChange}
+                        />
 
                         <Grid item xs={12} sm={5}>
                             <div>
@@ -280,7 +224,7 @@ function CustomerDetails(props) {
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                    inputProps={{min:0}}
+                                    inputProps={{ min: 0 }}
                                 />
                             </Tooltip>
                         </Grid>
@@ -293,7 +237,7 @@ function CustomerDetails(props) {
                                 id="credit"
                                 value={customer.currentCredit}
                                 onChange={handleFormChange}
-                               
+
 
                             />
                         </Grid>

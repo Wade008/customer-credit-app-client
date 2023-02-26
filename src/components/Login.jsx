@@ -1,5 +1,4 @@
 
-
 import { useState } from "react"
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -13,16 +12,19 @@ import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
 import { useNavigate } from "react-router-dom";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-
+import { useGlobalContext } from "./utils/globalStateContext"
 
 
 
 function Login() {
 
-    const [user, setUser] = useState({
+    const { store, dispatch } = useGlobalContext()
+
+    const initialUserState = {
         username: "",
         password: "",
-    })
+    }
+    const [user, setUser] = useState(initialUserState)
 
 
     const navigate = useNavigate();
@@ -38,23 +40,28 @@ function Login() {
     }
 
 
-    // const handleFormSubmit = (event) => {
-    //     event.preventDefault();
 
-    //     addCustomer(customer)
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
 
-    //     setCustomer(initialFormState);
-    //     navigate("/dashboard/message",{
-    //         state: {
-    //             message: "Customer successfully added to the system"
-    //         }
-    //     });
+        dispatch({
+            type: 'setUserName',
+            data: e.target.username.value
+        })
+        dispatch({
+            type: 'setToken',
+            data: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        })
 
+        setUser(initialUserState)
 
-    // };
+        navigate("/")
+
+    };
+
 
     const handleFormClose = () => {
-        // setCustomer(initialFormState)
+        setUser(initialUserState)
         navigate("/");
     }
 
@@ -83,7 +90,7 @@ function Login() {
                 <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                     Login
                 </Typography>
-                <ValidatorForm component="form" noValidate onSubmit="" >
+                <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
                             <TextValidator

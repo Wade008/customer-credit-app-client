@@ -7,7 +7,7 @@ export const Container = styled.div`
     flex-wrap: wrap;
     justify-content: center;
     margin:0 ${px2vw(30)} ${px2vw(30) };
-    padding-top: 50px;
+    padding-top: 90px;
     max-width: 100%;
    
    
@@ -92,7 +92,7 @@ export const FooterStyle = styled.div`
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 2.5rem;
+    height: 3.0rem;
  
 
  
@@ -101,7 +101,7 @@ export const FooterStyle = styled.div`
       font-size: 1rem;
       color: #FFFFFF;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 7px;
       
     }
 

@@ -1,5 +1,5 @@
 
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import {
   createBrowserRouter,
@@ -16,12 +16,9 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
-import Logout from "./components/Logout";
 import NewCustomer from "./components/NewCustomer";
 import CreditValue from "./components/CreditValue";
-
 import ProtectedRoute from "./components/ProtectedRoute";
-
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
@@ -40,10 +37,12 @@ function App() {
 
 
   const initialCustomers = customerList
-  const creditValue = accountInfo.creditValue
+  const initialUserInfo = accountInfo
+  const creditValue = accountInfo.creditvalue
 
   const [store, dispatch] = useReducer(globalReducer, initialState)
   const [customers, setCustomers] = useState(initialCustomers)
+  const [userInfo, setUserInfo] = useState(initialUserInfo)
   const [storeCredit, setStoreCredit] = useState(creditValue);
 
 
@@ -66,6 +65,7 @@ function App() {
     let newCustomers = customers.map((customer) => {
       if (String(customer.id) === custId) {
 
+        //replace with new customer
         return updatedCustomer;
       }
       return customer;
@@ -73,6 +73,12 @@ function App() {
     })
     setCustomers(newCustomers);
 
+  }
+
+  //update user info
+  const updateUser = (userDetails) => {
+
+    setUserInfo(userDetails)
   }
 
 
@@ -93,8 +99,8 @@ function App() {
 
     setStoreCredit(newCredit);
   }
-  
-console.log(storeCredit)
+
+
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -103,13 +109,12 @@ console.log(storeCredit)
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="logout" element={<Logout />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard
             customers={customers}
             storeCredit={storeCredit} />} />
           <Route path="dashboard/message" element={<Message />} />
-          <Route path="dashboard/profile" element={<Profile />} />
+          <Route path="dashboard/profile" element={<Profile userInfo={userInfo} updateUser={updateUser} />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue
             setCreditValue={updateStoreCredit}
@@ -125,7 +130,20 @@ console.log(storeCredit)
       </Route >
     )
   )
-
+  useEffect(() => {
+    const username = localStorage.getItem("username")
+    const token = localStorage.getItem("token")
+    if (username && token) {
+      dispatch({
+        type: "setUserName",
+        data: username,
+      })
+      dispatch({
+        type: "setToken",
+        data: token,
+      })
+    }
+  }, [])
 
   return (
 
