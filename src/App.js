@@ -30,21 +30,48 @@ import Message from "./components/Message";
 function App() {
 
 
-  const initialState = {
+  const initialAuthState = {
     userName: "",
     token: "",
   }
 
 
   const initialCustomers = customerList
-  const initialUserInfo = accountInfo
-  const creditValue = accountInfo.creditvalue
+  // const initialUserInfo = accountInfo
 
-  const [store, dispatch] = useReducer(globalReducer, initialState)
+
+  const [store, dispatch] = useReducer(globalReducer, initialAuthState)
   const [customers, setCustomers] = useState(initialCustomers)
-  const [userInfo, setUserInfo] = useState(initialUserInfo)
-  const [storeCredit, setStoreCredit] = useState(creditValue);
+  const [userInfo, setUserInfo] = useState({})
 
+
+  //set user info after successful registration or login
+  const initialiseUser = (userDetails) => {
+
+    setUserInfo(userDetails)
+
+  }
+
+
+  //update user info
+  const updateUser = (userDetails) => {
+
+    setUserInfo(userDetails)
+  }
+
+  //update store credit value
+
+  const updateStoreCredit = (newCredit) => {
+
+    setUserInfo((otherUserInfo) => {
+      return {
+        otherUserInfo,
+        ... { creditvalue: newCredit }
+      }
+
+    })
+
+  }
 
 
   const addCustomer = (customer) => {
@@ -75,11 +102,7 @@ function App() {
 
   }
 
-  //update user info
-  const updateUser = (userDetails) => {
 
-    setUserInfo(userDetails)
-  }
 
 
   //delete a customer
@@ -93,12 +116,7 @@ function App() {
     setCustomers(newCustomers);
 
   }
-  //update store credit value
 
-  const updateStoreCredit = (newCredit) => {
-
-    setStoreCredit(newCredit);
-  }
 
 
 
@@ -108,17 +126,17 @@ function App() {
         path="/" element={<Main />} errorElement={<NotFound />} >
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="register" element={<Register initialiseUser={initialiseUser} />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard
             customers={customers}
-            storeCredit={storeCredit} />} />
+            storeCredit={userInfo.creditvalue} />} />
           <Route path="dashboard/message" element={<Message />} />
           <Route path="dashboard/profile" element={<Profile userInfo={userInfo} updateUser={updateUser} />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue
             setCreditValue={updateStoreCredit}
-            storeCredit={storeCredit} />} />
+            storeCredit={userInfo.creditvalue} />} />
           <Route path="dashboard/:custId" element={<CustomerDetails
             deleteCustomer={deleteCustomer}
             updateCustomer={updateCustomer}

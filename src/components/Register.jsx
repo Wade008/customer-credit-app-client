@@ -12,9 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import UserForm from "./UserForm";
+import axios from "axios";
+import { useGlobalContext } from "./utils/globalStateContext";
 
 
-function Register() {
+function Register(props) {
+
+    const { initialiseUSer } = props;
+
     const initialFormState = {
         firstname: "",
         lastname: "",
@@ -26,9 +31,17 @@ function Register() {
         phone: "",
         creditvalue: 1
     }
+
+
     const [showPassword, setShowPassword] = useState(false);
 
     const [newUser, setNewUser] = useState(initialFormState)
+
+    const [errorMessage, setErrorMessage] = useState({
+        apiError: null
+    })
+
+    const { store, dispatch } = useGlobalContext()
 
     const navigate = useNavigate();
 
@@ -49,21 +62,24 @@ function Register() {
     }
 
 
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-
-        setNewUser(initialFormState)
-        console.log("Form submitted")
-
-
-        // addCustomer(customer)
-
-        // setCustomer(initialFormState);
-        // navigate("/dashboard/message",{
-        //     state: {
-        //         message: "Customer successfully added to the system"
-        //     }
-        // });
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        
+        axios
+            .post("/auth/register", newUser)
+            .then((res) => res.data)
+            .then((json) => {
+                dispatch({
+                    type: 'setToken',
+                    data: json.token
+                })
+                dispatch({
+                    type: 'setUser',
+                    data: newUser.username
+                })
+            })
+            
+        
 
 
     };

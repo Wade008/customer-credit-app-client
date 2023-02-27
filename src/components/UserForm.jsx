@@ -147,19 +147,19 @@ function UserForm(props) {
                 />
             </Grid>
 
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <TextValidator
                     required
                     fullWidth
                     name="creditvalue"
-                    label="Set the dollar value for one credit point"
+                    label="The dollar value for one credit point - default set as $1"
                     id="creditvalue"
                     value={user.creditvalue}
                     onChange={handleFormChange}
-                    validators={["required", "minNumber:0", "isNumber"]}
+                    validators={["required", "minNumber:1", "isNumber"]}
                     errorMessages={["This field is required", "Number must be positive", "Must be an integer"]}
                 />
-            </Grid>
+            </Grid> */}
         </Grid>
     )
 
