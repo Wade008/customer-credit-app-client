@@ -1,10 +1,10 @@
 
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import { TextValidator } from 'react-material-ui-form-validator';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import InputAdornment from '@mui/material/InputAdornment';
+// import Visibility from '@mui/icons-material/Visibility';
+// import VisibilityOff from '@mui/icons-material/VisibilityOff';
+// import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -74,18 +74,18 @@ function UserForm(props) {
                         value={user.password}
                         name="password"
                         onChange={handleFormChange}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
+                        // endAdornment={
+                        //     <InputAdornment position="end">
+                        //         <IconButton
+                        //             aria-label="toggle password visibility"
+                        //             onClick={handleClickShowPassword}
+                        //             onMouseDown={handleMouseDownPassword}
+                        //             edge="end"
+                        //         >
+                        //             {showPassword ? <VisibilityOff /> : <Visibility />}
+                        //         </IconButton>
+                        //     </InputAdornment>
+                        // }
                         label="Password"
                     />
                 </FormControl>
@@ -147,19 +147,6 @@ function UserForm(props) {
                 />
             </Grid>
 
-            {/* <Grid item xs={12}>
-                <TextValidator
-                    required
-                    fullWidth
-                    name="creditvalue"
-                    label="The dollar value for one credit point - default set as $1"
-                    id="creditvalue"
-                    value={user.creditvalue}
-                    onChange={handleFormChange}
-                    validators={["required", "minNumber:1", "isNumber"]}
-                    errorMessages={["This field is required", "Number must be positive", "Must be an integer"]}
-                />
-            </Grid> */}
         </Grid>
     )
 

@@ -16,9 +16,7 @@ import axios from "axios";
 import { useGlobalContext } from "./utils/globalStateContext";
 
 
-function Register(props) {
-
-    const { initialiseUSer } = props;
+function Register() {
 
     const initialFormState = {
         firstname: "",
@@ -64,7 +62,6 @@ function Register(props) {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        
         axios
             .post("/auth/register", newUser)
             .then((res) => res.data)
@@ -73,14 +70,18 @@ function Register(props) {
                     type: 'setToken',
                     data: json.token
                 })
-                dispatch({
-                    type: 'setUser',
-                    data: newUser.username
-                })
-            })
-            
-        
 
+            })
+            .catch(() => {
+                setErrorMessage((prevError) => {
+                    return {
+                        ...prevError,
+                        apiError: "Username already taken"
+                    }
+                })
+                console.log(errorMessage)
+
+            })
 
     };
 
@@ -111,27 +112,35 @@ function Register(props) {
                 <Avatar sx={{ m: 1 }}>
                     <HowToRegIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5" sx={{ p: 2 }} >
-                    Register
-                </Typography>
-                <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
-                    <UserForm
-                        handleFormChange={handleFormChange}
-                        user={newUser}
-                        showPassword={showPassword}
-                        handleClickShowPassword={handleClickShowPassword}
-                        handleMouseDownPassword={handleMouseDownPassword}
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2, backgroundColor: "#47B2E4" }}
-                    >
-                        Register
-                    </Button>
+                {store.token ? <Typography component="h1" variant="h5" sx={{ p: 2 }} >
+                    Registration Successful
+                </Typography> :
+                    <>
+                        <Typography component="h1" variant="h5" sx={{ p: 2 }} >
+                            Register
+                        </Typography>
+                        {errorMessage.apiError && <Typography component="h1" variant="subtitle1" sx={{ p: 2 }} >
+                            {errorMessage.apiError}
+                        </Typography>}
+                        <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
+                            <UserForm
+                                handleFormChange={handleFormChange}
+                                user={newUser}
+                                showPassword={showPassword}
+                                handleClickShowPassword={handleClickShowPassword}
+                                handleMouseDownPassword={handleMouseDownPassword}
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2, backgroundColor: "#47B2E4" }}
+                            >
+                                Register
+                            </Button>
 
-                </ValidatorForm>
+                        </ValidatorForm>
+                    </>}
             </Box>
 
         </Container>

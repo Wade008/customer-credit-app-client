@@ -18,10 +18,8 @@ function CreditValue(props) {
 
     const { storeCredit, setCreditValue } = props
 
-    console.log(storeCredit)
 
     let initialValue = storeCredit
-    // console.log(typeof initialValue)
 
     const [formValue, setFormValue] = useState(initialValue);
     const navigate = useNavigate();
@@ -32,7 +30,6 @@ function CreditValue(props) {
 
     }
 
-    // console.log(formValue)
 
     const handleFormSubmit = (e) => {
         e.preventDefault();

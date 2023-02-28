@@ -48,7 +48,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Dashboard(props) {
 
-    const { customers, storeCredit } = props;
+    const { customers, storeCredit, currentUser } = props;
 
     const [open, setOpen] = useState(false);
 
@@ -67,7 +67,7 @@ function Dashboard(props) {
 
     // console.log(location.state.message)
 
-    const storeName = `${accountInfo.companyname} in ${accountInfo.storesuburd}`;
+    const storeName = `${currentUser.companyname} in ${currentUser.storesuburb}`;
 
     
 

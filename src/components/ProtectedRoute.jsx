@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom";
 
-import { useGlobalContext } from "./utils/globalStateContext"
+import { useGlobalContext } from "./utils/globalStateContext";
 
 function ProtectedRoute() {
     const { store } = useGlobalContext()

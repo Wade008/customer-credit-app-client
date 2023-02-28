@@ -13,18 +13,23 @@ import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
 import { useNavigate } from "react-router-dom";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import { useGlobalContext } from "./utils/globalStateContext"
-
+import axios from "axios";
 
 
 function Login() {
 
-    const { store, dispatch } = useGlobalContext()
+  
 
     const initialUserState = {
         username: "",
         password: "",
     }
     const [user, setUser] = useState(initialUserState)
+
+    const [errorMessage, setErrorMessage] = useState({
+        apiError: null
+    })
+    const { store, dispatch } = useGlobalContext()
 
 
     const navigate = useNavigate();
@@ -40,23 +45,27 @@ function Login() {
     }
 
 
-
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        dispatch({
-            type: 'setUserName',
-            data: e.target.username.value
-        })
-        dispatch({
-            type: 'setToken',
-            data: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-        })
+        axios
+            .post("/auth/login", user)
+            .then((res) => res.data)
+            .then((json) => {
+                dispatch({
+                    type: 'setToken',
+                    data: json.token
+                })
+            })
+            .catch(() => {
+                setErrorMessage((prevError) => {
+                    return {
+                        ...prevError,
+                        apiError: "Username/password is incorrect"
+                    }
+                })
 
-        setUser(initialUserState)
-
-        navigate("/")
-
+            })
     };
 
 
@@ -84,59 +93,63 @@ function Login() {
                     alignItems: 'center',
                 }}
             >
+
                 <Avatar sx={{ m: 1 }}>
                     <VpnKeyTwoToneIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5" sx={{ p: 2 }} >
-                    Login
-                </Typography>
-                <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} >
-                            <TextValidator
-                                name="username"
-                                required
+                {store.token ? <Typography component="h1" variant="h5" sx={{ p: 2 }} >
+                    Login Successful
+                </Typography> :
+                    <>
+                        <Typography component="h1" variant="h5" sx={{ p: 2 }} >
+                            Login
+                        </Typography>
+                        {errorMessage.apiError && <Typography component="h1" variant="subtitle1" sx={{ p: 2 }} >
+                            {errorMessage.apiError}
+                        </Typography>}
+                        <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} >
+                                    <TextValidator
+                                        name="username"
+                                        required
+                                        fullWidth
+                                        id="username"
+                                        label="Username"
+                                        value={user.username}
+                                        autoFocus
+                                        onChange={handleFormChange}
+                                        validators={['required']}
+                                        errorMessages={['This field is required']}
+
+                                    />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextValidator
+                                        required
+                                        fullWidth
+                                        id="password"
+                                        label="Password"
+                                        name="password"
+                                        type="password"
+                                        value={user.password}
+                                        onChange={handleFormChange}
+                                        validators={['required']}
+                                        errorMessages={['This field is required']}
+
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
                                 fullWidth
-                                id="username"
-                                label="Username"
-                                value={user.username}
-                                autoFocus
-                                onChange={handleFormChange}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2, backgroundColor: "#47B2E4" }}
+                            >
+                                Login
+                            </Button>
 
-                            />
-                        </Grid>
-                        <Grid item xs={12} >
-                            <TextValidator
-                                required
-                                fullWidth
-                                id="password"
-                                label="Password"
-                                name="password"
-                                type="password"
-                                value={user.password}
-                                onChange={handleFormChange}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
-
-                            />
-                        </Grid>
-
-
-
-
-                    </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2, backgroundColor: "#47B2E4" }}
-                    >
-                        Login
-                    </Button>
-
-                </ValidatorForm>
+                        </ValidatorForm> </>}
             </Box>
 
         </Container>

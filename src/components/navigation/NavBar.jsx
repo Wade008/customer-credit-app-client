@@ -165,7 +165,7 @@ const NavBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {!store.userName ? (
+                            {!store.token ? (
                                 navItemsOut.map((item) => {
                                     return (
                                         <Link
@@ -217,7 +217,7 @@ const NavBar = () => {
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                    
-                        {!store.userName ? (
+                        {!store.token ? (
 
                             navItemsOut.map((item) => {
 

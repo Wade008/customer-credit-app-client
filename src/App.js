@@ -25,6 +25,8 @@ import Global from "./components/styled/Global";
 import { customerList, accountInfo } from "./components/dummydata/dummy";
 import CustomerDetails from "./components/CustomerDetails";
 import Message from "./components/Message";
+import axios from "axios";
+
 
 
 function App() {
@@ -37,35 +39,53 @@ function App() {
 
 
   const initialCustomers = customerList
-  // const initialUserInfo = accountInfo
-
 
   const [store, dispatch] = useReducer(globalReducer, initialAuthState)
+
   const [customers, setCustomers] = useState(initialCustomers)
-  const [userInfo, setUserInfo] = useState({})
+
+  const [currentUser, setCurrentUser] = useState({})
 
 
-  //set user info after successful registration or login
-  const initialiseUser = (userDetails) => {
 
-    setUserInfo(userDetails)
+  useEffect(() => {
 
+    if (store.token) {
+      axios
+        .get("auth/profile")
+        .then((res) => res.data)
+        .then((json) => {
+          setCurrentUser(json)
+        })
+        .catch((err) => {
+          setCurrentUser({})
+          console.log(err)
+        })
+    }
+
+  }, [store.token])
+
+
+
+  // //set user info after successful registration or login
+  const initialiseUser = () => {
+    // setUrl(url);
   }
 
 
   //update user info
   const updateUser = (userDetails) => {
 
-    setUserInfo(userDetails)
+    setCurrentUser(userDetails)
   }
 
   //update store credit value
 
   const updateStoreCredit = (newCredit) => {
 
-    setUserInfo((otherUserInfo) => {
+    setCurrentUser((othercurrentUser) => {
       return {
-        otherUserInfo,
+        othercurrentUser,
         ... { creditvalue: newCredit }
       }
 
@@ -117,26 +137,24 @@ function App() {
 
   }
 
-
-
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
         path="/" element={<Main />} errorElement={<NotFound />} >
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register initialiseUser={initialiseUser} />} />
+        <Route path="register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard
             customers={customers}
-            storeCredit={userInfo.creditvalue} />} />
+            storeCredit={currentUser.creditvalue}
+            currentUser={currentUser} />} />
           <Route path="dashboard/message" element={<Message />} />
-          <Route path="dashboard/profile" element={<Profile userInfo={userInfo} updateUser={updateUser} />} />
+          <Route path="dashboard/profile" element={<Profile currentUser={currentUser} updateUser={updateUser} />} />
           <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue
             setCreditValue={updateStoreCredit}
-            storeCredit={userInfo.creditvalue} />} />
+            storeCredit={currentUser.creditvalue} />} />
           <Route path="dashboard/:custId" element={<CustomerDetails
             deleteCustomer={deleteCustomer}
             updateCustomer={updateCustomer}
@@ -149,13 +167,13 @@ function App() {
     )
   )
   useEffect(() => {
-    const username = localStorage.getItem("username")
+    // const username = localStorage.getItem("username")
     const token = localStorage.getItem("token")
-    if (username && token) {
-      dispatch({
-        type: "setUserName",
-        data: username,
-      })
+    if (token) {
+      // dispatch({
+      //   type: "setUserName",
+      //   data: username,
+      // })
       dispatch({
         type: "setToken",
         data: token,

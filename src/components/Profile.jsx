@@ -16,11 +16,11 @@ import PermIdentityTwoToneIcon from '@mui/icons-material/PermIdentityTwoTone';
 
 function Profile(props) {
 
-    const { userInfo, updateUser } = props;
+    const { currentUser, updateUser } = props;
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const [user, setUser] = useState(userInfo)
+    const [user, setUser] = useState(currentUser)
 
 
     const navigate = useNavigate();
