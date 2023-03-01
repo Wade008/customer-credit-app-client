@@ -12,7 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import UserForm from "./UserForm";
 import PermIdentityTwoToneIcon from '@mui/icons-material/PermIdentityTwoTone';
-
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import axios from "axios";
 
 function Profile(props) {
 
@@ -45,13 +47,38 @@ function Profile(props) {
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        updateUser(user)
+        const updateCurrentUser = async () => {
 
-        navigate("/dashboard/message", {
-            state: {
-                message: "Your details have been updated"
+            try {
+                const response = await axios.put("auth/profile", user);
+                console.log(response.data)
+                //check if error message before updating state
+                if(response.data.error){
+                    
+                }
+                updateUser(response.data)
+
+                navigate("/dashboard/message", {
+                    state: {
+                        message: "Your details have been updated"
+                    }
+                });
             }
-        });
+            catch (err) {
+                console.log(err)
+                navigate("/dashboard/message", {
+                    state: {
+                        message: "Error! The update failed. Please try again"
+                    }
+                });
+            }
+        }
+
+        updateCurrentUser();
+
+    };
+
+    const handleUserDelete = () => {
 
 
     };
@@ -87,6 +114,7 @@ function Profile(props) {
                     Hi {user.firstname}
                 </Typography>
                 <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
+                <Grid container spacing={2}>
                     <UserForm
                         handleFormChange={handleFormChange}
                         user={user}
@@ -94,6 +122,7 @@ function Profile(props) {
                         handleClickShowPassword={handleClickShowPassword}
                         handleMouseDownPassword={handleMouseDownPassword}
                     />
+                    </Grid>
                     <Button
                         type="submit"
                         fullWidth
@@ -102,6 +131,18 @@ function Profile(props) {
                     >
                         Update my details
                     </Button>
+                    <Grid container justifyContent="center">
+                        <Grid item>
+                            <Link
+                                sx={{ color: "red" }}
+                                variant="body2"
+                                component="button"
+                                onClick={handleUserDelete}
+                            >
+                                Delete my account
+                            </Link>
+                        </Grid>
+                    </Grid>
 
                 </ValidatorForm>
             </Box>

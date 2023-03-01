@@ -14,7 +14,13 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import UserForm from "./UserForm";
 import axios from "axios";
 import { useGlobalContext } from "./utils/globalStateContext";
-
+import Grid from '@mui/material/Grid';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import InputAdornment from '@mui/material/InputAdornment';
 
 function Register() {
 
@@ -123,13 +129,44 @@ function Register() {
                             {errorMessage.apiError}
                         </Typography>}
                         <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
-                            <UserForm
-                                handleFormChange={handleFormChange}
-                                user={newUser}
-                                showPassword={showPassword}
-                                handleClickShowPassword={handleClickShowPassword}
-                                handleMouseDownPassword={handleMouseDownPassword}
-                            />
+                            <Grid container spacing={2}>
+                                <UserForm
+                                    handleFormChange={handleFormChange}
+                                    user={newUser}
+                                />
+
+                                <Grid item xs={12} >
+                                    <FormControl
+                                        required
+                                        fullWidth
+                                        variant="outlined">
+                                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                                        <OutlinedInput
+
+                                            id="password"
+                                            type={showPassword ? "text" : "password"}
+                                            value={newUser.password}
+                                            name="password"
+                                            onChange={handleFormChange}
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                            label="Password"
+                                        />
+                                    </FormControl>
+                                </Grid>
+
+
+                            </Grid>
                             <Button
                                 type="submit"
                                 fullWidth

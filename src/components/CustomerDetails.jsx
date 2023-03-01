@@ -31,7 +31,7 @@ function CustomerDetails(props) {
     })
 
 
-    const currentCustomerBalance = customerDetails.currentCredit;
+    const currentCustomerBalance = customerDetails.currentcredit;
 
     const options = ["Add", "Remove"];
 
@@ -73,7 +73,7 @@ function CustomerDetails(props) {
             setCustomer((prevCustomer) => {
                 return {
                     ...prevCustomer,
-                    currentCredit: updatedCredit
+                    currentcredit: updatedCredit
 
                 }
             })
@@ -178,7 +178,7 @@ function CustomerDetails(props) {
                                         setCustomer((prevCustomer) => {
                                             return {
                                                 ...prevCustomer,
-                                                currentCredit: updatedCreditAuto
+                                                currentcredit: updatedCreditAuto
 
                                             }
                                         })
@@ -232,10 +232,10 @@ function CustomerDetails(props) {
                             <TextValidator
                                 fullWidth
                                 disabled
-                                name="currentCredit"
+                                name="currentcredit"
                                 label="Available Credit After Update"
                                 id="credit"
-                                value={customer.currentCredit}
+                                value={customer.currentcredit}
                                 onChange={handleFormChange}
 
 

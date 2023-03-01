@@ -22,7 +22,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
-import { customerList, accountInfo } from "./components/dummydata/dummy";
 import CustomerDetails from "./components/CustomerDetails";
 import Message from "./components/Message";
 import axios from "axios";
@@ -37,40 +36,52 @@ function App() {
     token: "",
   }
 
-
-  const initialCustomers = customerList
-
   const [store, dispatch] = useReducer(globalReducer, initialAuthState)
 
-  const [customers, setCustomers] = useState(initialCustomers)
+  const [customers, setCustomers] = useState([])
 
   const [currentUser, setCurrentUser] = useState({})
 
+  // console.log(currentUser)
+  // console.log(customers)
 
 
   useEffect(() => {
 
-    if (store.token) {
-      axios
-        .get("auth/profile")
-        .then((res) => res.data)
-        .then((json) => {
-          setCurrentUser(json)
-        })
-        .catch((err) => {
-          setCurrentUser({})
-          console.log(err)
-        })
+    const getUser = async () => {
+
+      try {
+        const response = await axios.get("auth/profile")
+        setCurrentUser(response.data)
+      }
+      catch (err) {
+        setCurrentUser({})
+        console.log(err)
+      }
     }
 
+
+    const getCustomers = async () => {
+      try {
+        const response = await axios.get("/customers")
+        setCustomers(response.data)
+      }
+      catch (err) {
+        setCustomers([])
+        console.log(err)
+      }
+    }
+
+    if (store.token) {
+
+      getUser();
+      getCustomers();
+
+    }
+
+
+
   }, [store.token])
-
-
-
-  // //set user info after successful registration or login
-  const initialiseUser = () => {
-    // setUrl(url);
-  }
 
 
   //update user info
@@ -86,7 +97,7 @@ function App() {
     setCurrentUser((othercurrentUser) => {
       return {
         othercurrentUser,
-        ... { creditvalue: newCredit }
+        ...{ creditvalue: newCredit }
       }
 
     })
@@ -122,9 +133,6 @@ function App() {
 
   }
 
-
-
-
   //delete a customer
 
   const deleteCustomer = (custId) => {
@@ -137,10 +145,16 @@ function App() {
 
   }
 
+  //empty state on logout
+  const onLogout = () => {
+    setCustomers([])
+    setCurrentUser({})
+  }
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/" element={<Main />} errorElement={<NotFound />} >
+        path="/" element={<Main onLogout={onLogout} />} errorElement={<NotFound />} >
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
@@ -170,10 +184,6 @@ function App() {
     // const username = localStorage.getItem("username")
     const token = localStorage.getItem("token")
     if (token) {
-      // dispatch({
-      //   type: "setUserName",
-      //   data: username,
-      // })
       dispatch({
         type: "setToken",
         data: token,
@@ -193,10 +203,13 @@ function App() {
   );
 }
 
-function Main() {
+function Main(props) {
+
+  const { onLogout } = props;
+
   return (
     <>
-      <NavBar />
+      <NavBar onLogout={onLogout} />
       <Outlet />
     </>
   )

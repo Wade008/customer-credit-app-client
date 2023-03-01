@@ -5,15 +5,16 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useGlobalContext } from "../utils/globalStateContext";
 
 
-const NavBar = () => {
+const NavBar = (props) => {
 
+    const { onLogout } = props;
 
     const [anchorElNav, setAnchorElNav] = useState(null);
     const { store, dispatch } = useGlobalContext()
     // let navigate = useNavigate();
 
 
-  
+
 
     const handleLogout = () => {
         dispatch({
@@ -24,6 +25,7 @@ const NavBar = () => {
             type: "setToken",
             data: null,
         })
+        onLogout();
     }
 
     const styles = {
@@ -37,7 +39,7 @@ const NavBar = () => {
             title: "Home",
             link: "/",
             onClick: () => {
-               handleCloseNavMenu();   
+                handleCloseNavMenu();
             }
 
         },
@@ -45,9 +47,9 @@ const NavBar = () => {
             title: "Dashboard",
             link: "dashboard",
             onClick: () => {
-                handleCloseNavMenu();   
-             }
-      
+                handleCloseNavMenu();
+            }
+
         }
     ];
 
@@ -57,18 +59,18 @@ const NavBar = () => {
             title: "Login",
             link: "login",
             onClick: () => {
-                handleCloseNavMenu();  
+                handleCloseNavMenu();
                 // handleLogin(); 
-             }
+            }
         },
         {
             title: "Sign up",
             link: "register",
             onClick: () => {
-                handleCloseNavMenu();  
+                handleCloseNavMenu();
                 // handleLogin(); 
-             }
-            
+            }
+
         }
     ];
 
@@ -78,8 +80,8 @@ const NavBar = () => {
             title: "Profile",
             link: "dashboard/profile",
             onClick: () => {
-                handleCloseNavMenu();  
-             }
+                handleCloseNavMenu();
+            }
 
         },
         // {
@@ -88,16 +90,16 @@ const NavBar = () => {
         //     onClick: () => {
         //         handleCloseNavMenu();  
         //      }
-     
+
         // },
         {
             title: "Logout",
             link: "/",
             onClick: () => {
-                handleCloseNavMenu();  
+                handleCloseNavMenu();
                 handleLogout();
-             }
-            
+            }
+
         },
 
     ]
@@ -178,7 +180,7 @@ const NavBar = () => {
                                         >
                                             <MenuItem
                                                 onClick={item.onClick}
-                                                >
+                                            >
                                                 <Typography textAlign="center" sx={{ color: styles.color }}>
                                                     {item.title}
                                                 </Typography>
@@ -216,7 +218,7 @@ const NavBar = () => {
                         </Menu>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                   
+
                         {!store.token ? (
 
                             navItemsOut.map((item) => {

@@ -20,7 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { MultiBackground } from "./styled/CustomStyles";
-import { keyMetrics, accountInfo } from "./dummydata/dummy";
+import { keyMetrics } from "./dummydata/dummy";
 import KeyMetrics from "./KeyMetrics";
 import CustomerList from "./CustomerList";
 
@@ -51,6 +51,10 @@ function Dashboard(props) {
     const { customers, storeCredit, currentUser } = props;
 
     const [open, setOpen] = useState(false);
+
+
+
+    
 
 
     const handleDrawerOpen = () => {
