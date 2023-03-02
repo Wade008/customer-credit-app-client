@@ -7,7 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import Container from '@mui/material/Container';
 
-function Message() {
+function Message(props) {
+
+    const { onExit } = props;
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -15,23 +17,20 @@ function Message() {
 
     const handleExit = () => {
 
-        navigate("/dashboard");
-
+        navigate("/");
+        onExit()
     }
-
-
-
 
     return (
 
         <MultiBackground>
-            {location?.state?.message && <Container  sx={{ pt: 15, width:450}}>
-                <Box sx={{width:50}}>
+            {location?.state?.message && <Container sx={{ pt: 15, width: 450 }}>
+                <Box sx={{ width: 50 }}>
                     <IconButton onClick={handleExit}>
                         <CloseTwoToneIcon />
                     </IconButton>
                 </Box>
-                <Typography variant="h6" textAlign="center" sx={{color: "#333333"}}>{location.state.message}</Typography>
+                <Typography variant="h6" textAlign="center" sx={{ color: "#333333" }}>{location.state.message}</Typography>
 
             </Container>}
         </MultiBackground>

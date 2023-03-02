@@ -16,16 +16,17 @@ import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone
 function CreditValue(props) {
 
 
-    const { storeCredit, setCreditValue } = props
+    const { currentUser, setCreditValue, message, resetMessage } = props
 
 
-    let initialValue = storeCredit
+    let initialValue = currentUser.creditvalue
 
     const [formValue, setFormValue] = useState(initialValue);
+
     const navigate = useNavigate();
 
     const handleFormChange = (e) => {
-
+        resetMessage("")
         setFormValue(Number(e.target.value))
 
     }
@@ -36,17 +37,11 @@ function CreditValue(props) {
 
         setCreditValue(formValue)
 
-        navigate("/dashboard/message",{
-            state: {
-                message: "Credit value successfully updated"
-            }
-        });
-
     };
 
 
     const handleFormClose = () => {
-
+        resetMessage("")
         navigate("/dashboard");
     }
 
@@ -70,6 +65,9 @@ function CreditValue(props) {
                 <Avatar sx={{ m: 1 }}>
                     <MonetizationOnTwoToneIcon />
                 </Avatar>
+                {message && <Typography component="h1" variant="subtitle1" sx={{ p: 3 }} >
+                    {message}
+                </Typography>}
                 <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                     Update credit value
                 </Typography>

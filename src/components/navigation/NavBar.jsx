@@ -7,25 +7,18 @@ import { useGlobalContext } from "../utils/globalStateContext";
 
 const NavBar = (props) => {
 
-    const { onLogout } = props;
+    const { onExit } = props;
 
     const [anchorElNav, setAnchorElNav] = useState(null);
-    const { store, dispatch } = useGlobalContext()
+    const { store } = useGlobalContext()
     // let navigate = useNavigate();
 
 
 
 
     const handleLogout = () => {
-        dispatch({
-            type: "setUserName",
-            data: null,
-        })
-        dispatch({
-            type: "setToken",
-            data: null,
-        })
-        onLogout();
+
+        onExit();
     }
 
     const styles = {

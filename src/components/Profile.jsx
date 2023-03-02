@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,27 +14,31 @@ import UserForm from "./UserForm";
 import PermIdentityTwoToneIcon from '@mui/icons-material/PermIdentityTwoTone';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import axios from "axios";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function Profile(props) {
 
-    const { currentUser, updateUser } = props;
-
-    const [showPassword, setShowPassword] = useState(false);
+    const { currentUser, updateUser, message, setMessage, resetMessage, deleteUser } = props;
 
     const [user, setUser] = useState(currentUser)
 
+    const [open, setOpen] = useState(false);
+
+
+    useEffect(() => {
+        setMessage("")
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const navigate = useNavigate();
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (e) => {
-        e.preventDefault();
-    };
-
     const handleFormChange = (e) => {
-
+        setMessage("")
         setUser((prevUser) => {
             return {
                 ...prevUser,
@@ -47,50 +51,37 @@ function Profile(props) {
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        const updateCurrentUser = async () => {
-
-            try {
-                const response = await axios.put("auth/profile", user);
-                console.log(response.data)
-                //check if error message before updating state
-                if(response.data.error){
-                    
-                }
-                updateUser(response.data)
-
-                navigate("/dashboard/message", {
-                    state: {
-                        message: "Your details have been updated"
-                    }
-                });
-            }
-            catch (err) {
-                console.log(err)
-                navigate("/dashboard/message", {
-                    state: {
-                        message: "Error! The update failed. Please try again"
-                    }
-                });
-            }
-        }
-
-        updateCurrentUser();
+        updateUser(user)
 
     };
 
     const handleUserDelete = () => {
 
-
+        deleteUser();
+        navigate("/");
     };
 
     const handleFormClose = () => {
 
+        setMessage("")
+
         navigate("/dashboard");
     }
 
+    const handleClickOpen = () => {
+        setMessage("");
+        setOpen(true);
+
+    };
+
+    const handleClose = () => {
+        setMessage("");
+        setOpen(false);
+
+    };
+
 
     return (
-
 
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -110,18 +101,19 @@ function Profile(props) {
                 <Avatar sx={{ m: 1 }}>
                     <PermIdentityTwoToneIcon />
                 </Avatar>
+                {open ? null: message ?  <Typography component="h1" variant="subtitle1" sx={{ p: 3 }} >
+                    {message}
+                </Typography> : null}
                 <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                     Hi {user.firstname}
                 </Typography>
                 <ValidatorForm component="form" noValidate onSubmit={handleFormSubmit} >
-                <Grid container spacing={2}>
-                    <UserForm
-                        handleFormChange={handleFormChange}
-                        user={user}
-                        showPassword={showPassword}
-                        handleClickShowPassword={handleClickShowPassword}
-                        handleMouseDownPassword={handleMouseDownPassword}
-                    />
+                    <Grid container spacing={2}>
+                        <UserForm
+                            handleFormChange={handleFormChange}
+                            user={user}
+
+                        />
                     </Grid>
                     <Button
                         type="submit"
@@ -137,10 +129,40 @@ function Profile(props) {
                                 sx={{ color: "red" }}
                                 variant="body2"
                                 component="button"
-                                onClick={handleUserDelete}
+                                onClick={handleClickOpen}
+
                             >
                                 Delete my account
                             </Link>
+                            <Dialog
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    {"Delete account?"}
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        Are you sure you want to delete your account and all of your customers' details?
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={() => {
+                                        handleClose()
+
+                                    }}>No</Button>
+                                    <Button onClick={() => {
+                                        handleClose()
+                                        handleUserDelete()
+
+                                    }} autoFocus>
+                                        Yes
+                                    </Button>
+                                </DialogActions>
+
+                            </Dialog>
                         </Grid>
                     </Grid>
 

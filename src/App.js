@@ -42,8 +42,23 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState({})
 
-  // console.log(currentUser)
-  // console.log(customers)
+  const [message, setMessage] = useState("")
+
+  const resetMessage = () => {
+    setMessage("")
+  }
+
+  //empty state on logout
+  const onExit = () => {
+
+    dispatch({
+      type: "setToken",
+      data: null,
+    })
+
+    setCustomers([])
+    setCurrentUser({})
+  }
 
 
   useEffect(() => {
@@ -78,32 +93,71 @@ function App() {
       getCustomers();
 
     }
-
-
-
   }, [store.token])
 
 
-  //update user info
-  const updateUser = (userDetails) => {
+  //update user info - this is a centralised axios function to deal with updating user details and store credit value 
 
-    setCurrentUser(userDetails)
+  const updateCurrentUser = async (userDetails) => {
+
+    try {
+      const response = await axios.put("auth/profile", userDetails);
+      // console.log(response.data?.error)
+      //check if error message before updating state
+
+      if (response.data?.error) {
+
+        throw response.data.error
+      }
+
+      setCurrentUser(response.data)
+
+      setMessage("Update successful!")
+
+    }
+    catch (err) {
+      // console.log(err)
+      setMessage(err)
+    }
   }
 
-  //update store credit value
+
+  //update general user details
+
+  const updateUser = (userDetails) => {
+
+    updateCurrentUser(userDetails)
+  }
+
+  //update store credit value - also stored in the user collection
 
   const updateStoreCredit = (newCredit) => {
 
-    setCurrentUser((othercurrentUser) => {
-      return {
-        othercurrentUser,
-        ...{ creditvalue: newCredit }
-      }
-
-    })
+    let currentDetails = currentUser
+    let updatedUser = {
+      ...currentDetails,
+      ...{ creditvalue: newCredit }
+    }
+    updateCurrentUser(updatedUser)
 
   }
 
+  
+  //delete a user
+
+  const deleteUser = async () => {
+    setMessage("")
+    try {
+        const response = await axios.delete("auth/profile")
+
+        setMessage("You have successfully deleted you account. Sorry to see you go.")
+        onExit();
+    }
+    catch (err) {
+        setMessage("An error has occurred. Please try again")
+    }
+
+}
 
   const addCustomer = (customer) => {
 
@@ -145,17 +199,12 @@ function App() {
 
   }
 
-  //empty state on logout
-  const onLogout = () => {
-    setCustomers([])
-    setCurrentUser({})
-  }
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/" element={<Main onLogout={onLogout} />} errorElement={<NotFound />} >
-        <Route path="/" element={<Home />} />
+        path="/" element={<Main onExit={onExit} />} errorElement={<NotFound />} >
+        <Route path="/" element={<Home message={message} setMessage={setMessage}/>} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
@@ -163,12 +212,22 @@ function App() {
             customers={customers}
             storeCredit={currentUser.creditvalue}
             currentUser={currentUser} />} />
-          <Route path="dashboard/message" element={<Message />} />
-          <Route path="dashboard/profile" element={<Profile currentUser={currentUser} updateUser={updateUser} />} />
-          <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
+          <Route path="dashboard/message" element={<Message onExit={onExit}/>} />
+          <Route path="dashboard/profile" element={<Profile
+            currentUser={currentUser}
+            updateUser={updateUser}
+            message={message}
+            resetMessage={resetMessage}
+            deleteUser={deleteUser}
+            onExit={onExit} 
+            setMessage={setMessage}/>} />
+          <Route path="dashboard/addcustomer" element={<NewCustomer
+            addCustomer={addCustomer} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue
             setCreditValue={updateStoreCredit}
-            storeCredit={currentUser.creditvalue} />} />
+            currentUser={currentUser}
+            message={message}
+            resetMessage={resetMessage} />} />
           <Route path="dashboard/:custId" element={<CustomerDetails
             deleteCustomer={deleteCustomer}
             updateCustomer={updateCustomer}
@@ -205,11 +264,11 @@ function App() {
 
 function Main(props) {
 
-  const { onLogout } = props;
+  const { onExit } = props;
 
   return (
     <>
-      <NavBar onLogout={onLogout} />
+      <NavBar onExit={onExit} />
       <Outlet />
     </>
   )

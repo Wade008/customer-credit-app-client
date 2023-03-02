@@ -97,9 +97,7 @@ function Login() {
                 <Avatar sx={{ m: 1 }}>
                     <VpnKeyTwoToneIcon />
                 </Avatar>
-                {store.token ? <Typography component="h1" variant="h5" sx={{ p: 2 }} >
-                    Login Successful
-                </Typography> :
+                {store.token ?  navigate("/dashboard"):
                     <>
                         <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                             Login

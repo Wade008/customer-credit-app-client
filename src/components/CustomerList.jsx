@@ -123,13 +123,11 @@ function CustomerList(props) {
 
                 }}>
                     <Typography variant="subtitle2" textAlign="center" sx={{ color: "#333333" }}>
-                        You can find a customer by entering their first name, last name or email address
+                        {customers.length > 0 ? "You can find a customer by entering their first name, last name or email address" : "Oh no! You don't have any customers yet."}
                     </Typography>
                 </Box>
 
             }
-
-{/* Oh no! You don't have any customers yet. */}
 
         </MultiBackground>
     )
