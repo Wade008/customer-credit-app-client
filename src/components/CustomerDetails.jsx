@@ -1,6 +1,6 @@
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
@@ -17,21 +17,29 @@ import ManageAccountsTwoToneIcon from '@mui/icons-material/ManageAccountsTwoTone
 import Tooltip from '@mui/material/Tooltip';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import Autocomplete from '@mui/material/Autocomplete';
-import CustomerForm from "./CustomerForm"
+import CustomerForm from "./CustomerForm";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 function CustomerDetails(props) {
     // add state here when axios is added... update state through axios
 
-    const { customers, updateCustomer, deleteCustomer } = props;
+    const { customers, updateCustomer, deleteCustomer, setMessage } = props;
+
     const { custId } = useParams()
+
 
     //use this to set the form state
     let customerDetails = customers.find((customer) => {
-        return String(customer.id) === custId
+        return customer._id === custId
     })
 
 
-    const currentCustomerBalance = customerDetails.currentCredit;
+    const currentCustomerBalance = customerDetails.currentcredit;
 
     const options = ["Add", "Remove"];
 
@@ -39,16 +47,18 @@ function CustomerDetails(props) {
     const [credit, setCredit] = useState(0);
     const [value, setValue] = useState(options[0]);
     const [inputValue, setInputValue] = useState('');
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setMessage("")
 
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleFormChange = (e) => {
-
+        setMessage("")
         let name = e.target.name
-
-
 
         if (name === "creditChange") {
 
@@ -73,7 +83,7 @@ function CustomerDetails(props) {
             setCustomer((prevCustomer) => {
                 return {
                     ...prevCustomer,
-                    currentCredit: updatedCredit
+                    currentcredit: updatedCredit
 
                 }
             })
@@ -95,41 +105,36 @@ function CustomerDetails(props) {
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        // remove creditChange key:value... save as a new object ... add new customer back into customers array in state
-
-        // delete the updateCredit field
-
         let newCustomer = customer
 
-
-
         updateCustomer(custId, newCustomer)
-
-
-        navigate("/dashboard/message", {
-            state: {
-                message: "Customer details successfully updated"
-            }
-        });
-
+        navigate("/dashboard")
 
     };
 
     const handleDelete = (e) => {
-        e.preventDefault();
+    
         deleteCustomer(custId);
-        navigate("/dashboard/message", {
-            state: {
-                message: "Customer successfully deleted"
-            }
-        });
+        navigate("/dashboard")
 
     }
 
     const handleFormClose = () => {
-
+        setMessage("")
         navigate("/dashboard");
     }
+
+    const handleClickOpen = () => {
+        setMessage("");
+        setOpen(true);
+
+    };
+
+    const handleClose = () => {
+        setMessage("");
+        setOpen(false);
+
+    };
 
 
 
@@ -178,15 +183,12 @@ function CustomerDetails(props) {
                                         setCustomer((prevCustomer) => {
                                             return {
                                                 ...prevCustomer,
-                                                currentCredit: updatedCreditAuto
+                                                currentcredit: updatedCreditAuto
 
                                             }
                                         })
 
                                         setValue(newValue);
-
-
-
 
                                     }}
                                     inputValue={inputValue}
@@ -232,10 +234,10 @@ function CustomerDetails(props) {
                             <TextValidator
                                 fullWidth
                                 disabled
-                                name="currentCredit"
+                                name="currentcredit"
                                 label="Available Credit After Update"
                                 id="credit"
-                                value={customer.currentCredit}
+                                value={customer.currentcredit}
                                 onChange={handleFormChange}
 
 
@@ -250,19 +252,49 @@ function CustomerDetails(props) {
                     >
                         Update
                     </Button>
-                    <Grid container justifyContent="center">
-                        <Grid item>
-                            <Link
-                                sx={{ color: "red" }}
-                                variant="body2"
-                                component="button"
-                                onClick={handleDelete}
-                            >
-                                Delete Customer
-                            </Link>
-                        </Grid>
-                    </Grid>
                 </ValidatorForm>
+                <Grid container justifyContent="center">
+                    <Grid item>
+                        <Link
+                            sx={{ color: "red" }}
+                            variant="body2"
+                            component="button"
+                            onClick={handleClickOpen}
+                        >
+                            Delete Customer
+                        </Link>
+                        <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Delete customer?"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure you want to delete this customer?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => {
+                                    handleClose()
+
+                                }}>No</Button>
+                                <Button onClick={() => {
+                                    handleClose()
+                                    handleDelete()
+
+                                }} autoFocus>
+                                    Yes
+                                </Button>
+                            </DialogActions>
+
+                        </Dialog>
+                    </Grid>
+                </Grid>
+
             </Box>
 
         </Container>

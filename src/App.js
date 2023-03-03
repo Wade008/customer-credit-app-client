@@ -22,107 +22,281 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
-import { customerList, accountInfo } from "./components/dummydata/dummy";
 import CustomerDetails from "./components/CustomerDetails";
-import Message from "./components/Message";
+// import Message from "./components/Message";
+import axios from "axios";
+
+
 
 
 function App() {
 
 
-  const initialState = {
+  const initialAuthState = {
     userName: "",
     token: "",
   }
 
+  const [store, dispatch] = useReducer(globalReducer, initialAuthState)
 
-  const initialCustomers = customerList
-  const initialUserInfo = accountInfo
-  const creditValue = accountInfo.creditvalue
+  const [customers, setCustomers] = useState([])
 
-  const [store, dispatch] = useReducer(globalReducer, initialState)
-  const [customers, setCustomers] = useState(initialCustomers)
-  const [userInfo, setUserInfo] = useState(initialUserInfo)
-  const [storeCredit, setStoreCredit] = useState(creditValue);
+  const [currentUser, setCurrentUser] = useState({})
 
+  const [metrics, setMetrics] = useState({})
+
+  const [message, setMessage] = useState("")
 
 
-  const addCustomer = (customer) => {
+  //empty state on logout
+  const onExit = () => {
 
-    setCustomers((prevCustomers) => {
-      return [
-        ...prevCustomers,
-        { id: prevCustomers.length + 1, ...customer }
-      ]
+    dispatch({
+      type: "setToken",
+      data: null,
+    })
+
+    setCustomers([])
+    setCurrentUser({})
+    setMetrics({})
+  }
+
+
+  useEffect(() => {
+
+    const getUser = async () => {
+
+      try {
+        const response = await axios.get("auth/profile")
+        setCurrentUser(response.data)
+      }
+      catch (err) {
+        setCurrentUser({})
+        console.log(err)
+      }
     }
-    );
+
+
+    const getCustomers = async () => {
+      try {
+        const response = await axios.get("/customers")
+        setCustomers(response.data)
+      }
+      catch (err) {
+        setCustomers([])
+        console.log(err)
+      }
+    }
+
+    if (store.token) {
+
+      getUser();
+      getCustomers();
+
+    }
+  }, [store.token])
+
+
+  //query metrics when customer, user state changes
+
+  useEffect(() => {
+
+    const getMetrics = async () => {
+
+      try {
+        const response = await axios.get("/metrics")
+        setMetrics(response.data)
+        console.log(response.data)
+
+      }
+      catch (err) {
+        setMetrics({})
+        console.log(err)
+      }
+    }
+
+    if (store.token) {
+      getMetrics();
+    }
+
+  }, [store.token, customers, currentUser])
+
+
+  //update user info - this is a centralised axios function to deal with updating user details and store credit value 
+
+  const updateCurrentUser = async (userDetails) => {
+
+    try {
+      const response = await axios.put("auth/profile", userDetails);
+      // console.log(response.data?.error)
+      //check if error message before updating state
+
+      if (response.data?.error) {
+
+        throw response.data.error
+      }
+
+      setCurrentUser(response.data)
+
+      setMessage("Updated successfull!")
+
+    }
+    catch (err) {
+      // console.log(err)
+      setMessage("An error has occurred. Please try again")
+    }
+  }
+
+
+  //update general user details
+
+  const updateUser = (userDetails) => {
+
+    updateCurrentUser(userDetails)
+  }
+
+  //update store credit value - also stored in the user collection
+
+  const updateStoreCredit = (newCredit) => {
+
+    let currentDetails = currentUser
+    let updatedUser = {
+      ...currentDetails,
+      ...{ creditvalue: newCredit }
+    }
+    updateCurrentUser(updatedUser)
+
+  }
+
+
+  //delete a user
+
+  const deleteUser = async () => {
+    setMessage("")
+    try {
+      const response = await axios.delete("auth/profile")
+
+      setMessage("You have successfully deleted your account. Sorry to see you go.")
+      onExit();
+    }
+    catch (err) {
+      setMessage("An error has occurred. Please try again")
+    }
+
+  }
+
+
+
+  const addCustomer = async (customer) => {
+    setMessage("")
+    try {
+      const response = await axios.post("/customers", customer)
+
+      setCustomers((prevCustomers) => {
+        return [
+          ...prevCustomers,
+          response.data]
+      }
+      )
+      setMessage("Customer successfully added to the system")
+
+    }
+    catch (err) {
+      setMessage("An error has occurred. Please try again")
+
+    }
+
   }
 
   //update customer
 
-  const updateCustomer = (custId, updatedCustomer) => {
+  const updateCustomer = async (custId, updatedDetails) => {
+    setMessage("")
 
-    let newCustomers = customers.map((customer) => {
-      if (String(customer.id) === custId) {
+    try {
+      const response = await axios.put(`customers/${custId}`, updatedDetails)
 
-        //replace with new customer
-        return updatedCustomer;
-      }
-      return customer;
+      // console.log(updatedDetails.data)
 
-    })
-    setCustomers(newCustomers);
+      let newCustomers = customers.map((customer) => {
+        if (customer._id === custId) {
+
+          //replace with new customer
+          return response.data
+        }
+        return customer;
+
+      })
+      // console.log(newCustomers)
+      // update customers state to match the update
+      setCustomers(newCustomers);
+      setMessage("Customer details updated successfully");
+    }
+    catch (err) {
+      setMessage("An error has occurred. Please try again")
+    }
 
   }
-
-  //update user info
-  const updateUser = (userDetails) => {
-
-    setUserInfo(userDetails)
-  }
-
 
   //delete a customer
 
-  const deleteCustomer = (custId) => {
+  const deleteCustomer = async (custId) => {
 
-    let newCustomers = customers.filter((customer) => {
-      return String(customer.id) !== custId
-    })
+    try {
+      const response = await axios.delete(`customers/${custId}`)
 
-    setCustomers(newCustomers);
+      let newCustomers = customers.filter((customer) => {
+        return customer._id !== response.data._id
+      })
+
+      setCustomers(newCustomers);
+      setMessage("Customer has been deleted from the system");
+
+    }
+    catch (err) {
+      setMessage("An error has occurred. Please try again")
+    }
 
   }
-  //update store credit value
-
-  const updateStoreCredit = (newCredit) => {
-
-    setStoreCredit(newCredit);
-  }
-
 
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/" element={<Main />} errorElement={<NotFound />} >
-        <Route path="/" element={<Home />} />
+        path="/" element={<Main onExit={onExit} />} errorElement={<NotFound />} >
+        <Route path="/" element={<Home message={message} setMessage={setMessage} />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard
             customers={customers}
-            storeCredit={storeCredit} />} />
-          <Route path="dashboard/message" element={<Message />} />
-          <Route path="dashboard/profile" element={<Profile userInfo={userInfo} updateUser={updateUser} />} />
-          <Route path="dashboard/addcustomer" element={<NewCustomer addCustomer={addCustomer} />} />
+            storeCredit={currentUser.creditvalue}
+            currentUser={currentUser}
+            message={message}
+            setMessage={setMessage}
+            metrics={metrics} />} />
+          <Route path="dashboard/profile" element={<Profile
+            currentUser={currentUser}
+            updateUser={updateUser}
+            message={message}
+            deleteUser={deleteUser}
+            onExit={onExit}
+            setMessage={setMessage} />} />
+          <Route path="dashboard/addcustomer" element={<NewCustomer
+            addCustomer={addCustomer}
+            message={message}
+            setMessage={setMessage} />} />
           <Route path="dashboard/creditvalue" element={<CreditValue
             setCreditValue={updateStoreCredit}
-            storeCredit={storeCredit} />} />
+            currentUser={currentUser}
+            message={message}
+            setMessage={setMessage} />} />
           <Route path="dashboard/:custId" element={<CustomerDetails
             deleteCustomer={deleteCustomer}
             updateCustomer={updateCustomer}
-            customers={customers} />}
+            customers={customers}
+            message={message}
+            setMessage={setMessage} />}
           />
         </Route>
 
@@ -131,13 +305,9 @@ function App() {
     )
   )
   useEffect(() => {
-    const username = localStorage.getItem("username")
+    // const username = localStorage.getItem("username")
     const token = localStorage.getItem("token")
-    if (username && token) {
-      dispatch({
-        type: "setUserName",
-        data: username,
-      })
+    if (token) {
       dispatch({
         type: "setToken",
         data: token,
@@ -157,10 +327,13 @@ function App() {
   );
 }
 
-function Main() {
+function Main(props) {
+
+  const { onExit } = props;
+
   return (
     <>
-      <NavBar />
+      <NavBar onExit={onExit} />
       <Outlet />
     </>
   )

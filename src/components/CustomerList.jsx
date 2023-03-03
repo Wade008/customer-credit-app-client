@@ -14,6 +14,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { MultiBackground } from "./styled/CustomStyles";
 
 
@@ -87,16 +88,16 @@ function CustomerList(props) {
                         <TableBody>
                             {filteredCustomers.map((customer) => {
                                 return (
-                                    <Tooltip key={customer.id} title="Click to update customer" placement="top">
+                                    <Tooltip key={customer._id} title="Click to update customer" placement="top">
                                         <TableRow
-                                            key={customer.id}
+                                            key={customer._id}
                                             sx={{
                                                 '&:last-child td, &:last-child th': { border: 0 }, "&:hover": {
                                                     cursor: "pointer"
                                                 }
                                             }}
                                             onClick={() => {
-                                                navigate(`/dashboard/${customer.id}`)
+                                                navigate(`/dashboard/${customer._id}`)
                                             }}
 
 
@@ -105,7 +106,7 @@ function CustomerList(props) {
                                             <TableCell >{customer.lastname}</TableCell>
                                             <TableCell align="right">{customer.email}</TableCell>
                                             <TableCell align="right">{customer.phone}</TableCell>
-                                            <TableCell align="right">{customer.currentCredit}</TableCell>
+                                            <TableCell align="right">{customer.currentcredit}</TableCell>
 
                                         </TableRow>
                                     </Tooltip>
@@ -115,9 +116,18 @@ function CustomerList(props) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                : null}
+                : <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    pt: 2,
 
+                }}>
+                    <Typography variant="subtitle2" textAlign="center" sx={{ color: "#333333" }}>
+                        {customers.length > 0 ? "You can find a customer by entering their first name, last name or email address" : "Oh no! You don't have any customers yet."}
+                    </Typography>
+                </Box>
 
+            }
 
         </MultiBackground>
     )

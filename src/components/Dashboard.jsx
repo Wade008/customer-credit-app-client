@@ -20,9 +20,18 @@ import Tooltip from '@mui/material/Tooltip';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { MultiBackground } from "./styled/CustomStyles";
-import { keyMetrics, accountInfo } from "./dummydata/dummy";
 import KeyMetrics from "./KeyMetrics";
 import CustomerList from "./CustomerList";
+import PersonPinTwoToneIcon from '@mui/icons-material/PersonPinTwoTone';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import CardMembershipTwoToneIcon from '@mui/icons-material/CardMembershipTwoTone';
+import PeopleAltTwoToneIcon from '@mui/icons-material/PeopleAltTwoTone';
+
 
 const drawerWidth = 240;
 
@@ -48,10 +57,14 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Dashboard(props) {
 
-    const { customers, storeCredit } = props;
+    const { customers, storeCredit, currentUser, message, setMessage, metrics } = props;
 
     const [open, setOpen] = useState(false);
 
+    const handleClose = () => {
+        setMessage("");
+
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -67,9 +80,9 @@ function Dashboard(props) {
 
     // console.log(location.state.message)
 
-    const storeName = `${accountInfo.companyname} in ${accountInfo.storesuburd}`;
+    const storeName = `${currentUser.companyname} in ${currentUser.storesuburb}`;
 
-    
+
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -83,6 +96,14 @@ function Dashboard(props) {
     // MonetizationOnTwoToneIcon 
 
     const menuItems = [
+        {
+            name: "Profile",
+            icon: <PersonPinTwoToneIcon />,
+            onClick: () => {
+                navigate("profile")
+            }
+
+        },
         {
             name: "New customer",
             icon: <AddBoxTwoToneIcon />,
@@ -98,7 +119,15 @@ function Dashboard(props) {
             }
         },
 
-    ]
+    ];
+
+    // prepare key metrics array - add icons interatively
+
+    const icons = [< PeopleAltTwoToneIcon />, < CardMembershipTwoToneIcon />, < MonetizationOnTwoToneIcon />]
+
+    let keyMetrics = metrics.map((metric, index) => {
+        return {...metric, icon: icons[index] }
+    })
 
 
     const drawer = (
@@ -192,6 +221,26 @@ function Dashboard(props) {
                     <Divider sx={{ pt: 2 }} />
 
                     <CustomerList customers={customers} />
+
+                    <Dialog
+                        open={message ? true : false}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            {"Message"}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {message}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} autoFocus>OK</Button>
+                        </DialogActions>
+
+                    </Dialog>
                 </Main>
 
             </Box>

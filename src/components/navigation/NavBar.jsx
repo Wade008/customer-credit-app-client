@@ -5,25 +5,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useGlobalContext } from "../utils/globalStateContext";
 
 
-const NavBar = () => {
+const NavBar = (props) => {
 
+    const { onExit } = props;
 
     const [anchorElNav, setAnchorElNav] = useState(null);
-    const { store, dispatch } = useGlobalContext()
+    const { store } = useGlobalContext()
     // let navigate = useNavigate();
 
 
-  
+
 
     const handleLogout = () => {
-        dispatch({
-            type: "setUserName",
-            data: null,
-        })
-        dispatch({
-            type: "setToken",
-            data: null,
-        })
+
+        onExit();
     }
 
     const styles = {
@@ -37,7 +32,7 @@ const NavBar = () => {
             title: "Home",
             link: "/",
             onClick: () => {
-               handleCloseNavMenu();   
+                handleCloseNavMenu();
             }
 
         },
@@ -45,9 +40,9 @@ const NavBar = () => {
             title: "Dashboard",
             link: "dashboard",
             onClick: () => {
-                handleCloseNavMenu();   
-             }
-      
+                handleCloseNavMenu();
+            }
+
         }
     ];
 
@@ -57,47 +52,47 @@ const NavBar = () => {
             title: "Login",
             link: "login",
             onClick: () => {
-                handleCloseNavMenu();  
+                handleCloseNavMenu();
                 // handleLogin(); 
-             }
+            }
         },
         {
             title: "Sign up",
             link: "register",
             onClick: () => {
-                handleCloseNavMenu();  
+                handleCloseNavMenu();
                 // handleLogin(); 
-             }
-            
+            }
+
         }
     ];
 
     const navItemsIn = [
         ...navItemsBase,
-        {
-            title: "Profile",
-            link: "dashboard/profile",
-            onClick: () => {
-                handleCloseNavMenu();  
-             }
+        // {
+        //     title: "Profile",
+        //     link: "dashboard/profile",
+        //     onClick: () => {
+        //         handleCloseNavMenu();
+        //     }
 
-        },
+        // },
         // {
         //     title: "Categories",
         //     link: "dashboard/categories",
         //     onClick: () => {
         //         handleCloseNavMenu();  
         //      }
-     
+
         // },
         {
             title: "Logout",
             link: "/",
             onClick: () => {
-                handleCloseNavMenu();  
+                handleCloseNavMenu();
                 handleLogout();
-             }
-            
+            }
+
         },
 
     ]
@@ -165,7 +160,7 @@ const NavBar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {!store.userName ? (
+                            {!store.token ? (
                                 navItemsOut.map((item) => {
                                     return (
                                         <Link
@@ -178,7 +173,7 @@ const NavBar = () => {
                                         >
                                             <MenuItem
                                                 onClick={item.onClick}
-                                                >
+                                            >
                                                 <Typography textAlign="center" sx={{ color: styles.color }}>
                                                     {item.title}
                                                 </Typography>
@@ -216,8 +211,8 @@ const NavBar = () => {
                         </Menu>
                     </Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                   
-                        {!store.userName ? (
+
+                        {!store.token ? (
 
                             navItemsOut.map((item) => {
 
