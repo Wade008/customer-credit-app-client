@@ -88,16 +88,16 @@ function CustomerList(props) {
                         <TableBody>
                             {filteredCustomers.map((customer) => {
                                 return (
-                                    <Tooltip key={customer.id} title="Click to update customer" placement="top">
+                                    <Tooltip key={customer._id} title="Click to update customer" placement="top">
                                         <TableRow
-                                            key={customer.id}
+                                            key={customer._id}
                                             sx={{
                                                 '&:last-child td, &:last-child th': { border: 0 }, "&:hover": {
                                                     cursor: "pointer"
                                                 }
                                             }}
                                             onClick={() => {
-                                                navigate(`/dashboard/${customer.id}`)
+                                                navigate(`/dashboard/${customer._id}`)
                                             }}
 
 

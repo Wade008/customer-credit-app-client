@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+
 import homeImage from "../img/home_img.jpg";
 import { Container, Box, HomeBackground, Title, Description } from "./styled/CustomStyles";
 import Footer from "./Footer";
@@ -42,7 +42,7 @@ function Home(props) {
                         An application to help you keep track of your customers' credit
                     </Description>
                     <Dialog
-                        open={message}
+                        open={message ? true: false}
                         onClose={handleClose}
                         aria-labelledby="alert-dialog-title"
                         aria-describedby="alert-dialog-description"

@@ -22,7 +22,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 function Profile(props) {
 
-    const { currentUser, updateUser, message, setMessage, resetMessage, deleteUser } = props;
+    const { currentUser, updateUser, setMessage, deleteUser } = props;
 
     const [user, setUser] = useState(currentUser)
 
@@ -52,6 +52,7 @@ function Profile(props) {
         e.preventDefault();
 
         updateUser(user)
+        navigate("/dashboard")
 
     };
 
@@ -101,9 +102,6 @@ function Profile(props) {
                 <Avatar sx={{ m: 1 }}>
                     <PermIdentityTwoToneIcon />
                 </Avatar>
-                {open ? null: message ?  <Typography component="h1" variant="subtitle1" sx={{ p: 3 }} >
-                    {message}
-                </Typography> : null}
                 <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                     Hi {user.firstname}
                 </Typography>
@@ -123,50 +121,51 @@ function Profile(props) {
                     >
                         Update my details
                     </Button>
-                    <Grid container justifyContent="center">
-                        <Grid item>
-                            <Link
-                                sx={{ color: "red" }}
-                                variant="body2"
-                                component="button"
-                                onClick={handleClickOpen}
-
-                            >
-                                Delete my account
-                            </Link>
-                            <Dialog
-                                open={open}
-                                onClose={handleClose}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <DialogTitle id="alert-dialog-title">
-                                    {"Delete account?"}
-                                </DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                        Are you sure you want to delete your account and all of your customers' details?
-                                    </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={() => {
-                                        handleClose()
-
-                                    }}>No</Button>
-                                    <Button onClick={() => {
-                                        handleClose()
-                                        handleUserDelete()
-
-                                    }} autoFocus>
-                                        Yes
-                                    </Button>
-                                </DialogActions>
-
-                            </Dialog>
-                        </Grid>
-                    </Grid>
-
                 </ValidatorForm>
+                <Grid container justifyContent="center">
+                    <Grid item>
+                        <Link
+                            sx={{ color: "red" }}
+                            variant="body2"
+                            component="button"
+                            onClick={handleClickOpen}
+
+                        >
+                            Delete my account
+                        </Link>
+                        <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Delete account?"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure you want to delete your account and all of your customers' details?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => {
+                                    handleClose()
+
+                                }}>No</Button>
+                                <Button onClick={() => {
+                                    handleClose()
+                                    handleUserDelete()
+
+                                }} autoFocus>
+                                    Yes
+                                </Button>
+                            </DialogActions>
+
+                        </Dialog>
+                    </Grid>
+                </Grid>
+
+
             </Box>
 
         </Container>

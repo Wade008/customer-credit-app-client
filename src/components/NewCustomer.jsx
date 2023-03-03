@@ -18,24 +18,22 @@ import CustomerForm from "./CustomerForm";
 
 function NewCustomer(props) {
 
-    const { addCustomer } = props;
+    const { addCustomer, setMessage } = props;
 
     const initialFormState = {
         firstname: "",
         lastname: "",
         email: "",
         phone: "",
-        currentCredit: 0
+        currentcredit: 0
     }
-
-
 
     const [customer, setCustomer] = useState(initialFormState)
 
     const navigate = useNavigate();
 
     const handleFormChange = (e) => {
-
+        setMessage("")
         setCustomer((prevCustomer) => {
             return {
                 ...prevCustomer,
@@ -45,23 +43,20 @@ function NewCustomer(props) {
     }
 
 
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
 
         addCustomer(customer)
 
         setCustomer(initialFormState);
-        navigate("/dashboard/message", {
-            state: {
-                message: "Customer successfully added to the system"
-            }
-        });
 
+        navigate("/dashboard");
 
     };
 
     const handleFormClose = () => {
         setCustomer(initialFormState)
+        setMessage("")
         navigate("/dashboard");
     }
 
@@ -77,6 +72,7 @@ function NewCustomer(props) {
                     <CloseTwoToneIcon />
                 </IconButton>
             </Box>
+
             <Box
                 sx={{
                     display: 'flex',
@@ -87,6 +83,9 @@ function NewCustomer(props) {
                 <Avatar sx={{ m: 1 }}>
                     <PersonAddTwoToneIcon />
                 </Avatar>
+                {/* {message && <Typography component="h1" variant="subtitle1" sx={{ p: 3 }} >
+                    {message}
+                </Typography>} */}
                 <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                     Add a new customer
                 </Typography>
@@ -101,17 +100,18 @@ function NewCustomer(props) {
                             <TextValidator
                                 required
                                 fullWidth
-                                name="currentCredit"
+                                name="currentcredit"
                                 label="Add Credit"
                                 id="credit"
 
-                                value={customer.currentCredit}
+                                value={customer.currentcredit}
                                 onChange={handleFormChange}
                                 validators={["required", "minNumber:0", "isNumber"]}
                                 errorMessages={["This field is required", "Number must be positive", "Must be an integer"]}
                             />
                         </Grid>
                     </Grid>
+
                     <Button
                         type="submit"
                         fullWidth

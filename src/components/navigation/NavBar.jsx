@@ -69,14 +69,14 @@ const NavBar = (props) => {
 
     const navItemsIn = [
         ...navItemsBase,
-        {
-            title: "Profile",
-            link: "dashboard/profile",
-            onClick: () => {
-                handleCloseNavMenu();
-            }
+        // {
+        //     title: "Profile",
+        //     link: "dashboard/profile",
+        //     onClick: () => {
+        //         handleCloseNavMenu();
+        //     }
 
-        },
+        // },
         // {
         //     title: "Categories",
         //     link: "dashboard/categories",
