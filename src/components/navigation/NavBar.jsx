@@ -13,9 +13,6 @@ const NavBar = (props) => {
     const { store } = useGlobalContext()
     // let navigate = useNavigate();
 
-
-
-
     const handleLogout = () => {
 
         onExit();
@@ -69,22 +66,6 @@ const NavBar = (props) => {
 
     const navItemsIn = [
         ...navItemsBase,
-        // {
-        //     title: "Profile",
-        //     link: "dashboard/profile",
-        //     onClick: () => {
-        //         handleCloseNavMenu();
-        //     }
-
-        // },
-        // {
-        //     title: "Categories",
-        //     link: "dashboard/categories",
-        //     onClick: () => {
-        //         handleCloseNavMenu();  
-        //      }
-
-        // },
         {
             title: "Logout",
             link: "/",
