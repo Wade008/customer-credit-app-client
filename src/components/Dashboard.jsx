@@ -18,7 +18,6 @@ import AddBoxTwoToneIcon from '@mui/icons-material/AddBoxTwoTone';
 import MonetizationOnTwoToneIcon from '@mui/icons-material/MonetizationOnTwoTone';
 import Tooltip from '@mui/material/Tooltip';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
-import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
 import { MultiBackground } from "./styled/CustomStyles";
 import KeyMetrics from "./KeyMetrics";
 import CustomerList from "./CustomerList";
@@ -31,6 +30,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CardMembershipTwoToneIcon from '@mui/icons-material/CardMembershipTwoTone';
 import PeopleAltTwoToneIcon from '@mui/icons-material/PeopleAltTwoTone';
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 const drawerWidth = 240;
@@ -126,7 +126,7 @@ function Dashboard(props) {
     const icons = [< PeopleAltTwoToneIcon />, < CardMembershipTwoToneIcon />, < MonetizationOnTwoToneIcon />]
 
     let keyMetrics = metrics.map((metric, index) => {
-        return {...metric, icon: icons[index] }
+        return { ...metric, icon: icons[index] }
     })
 
 
@@ -182,7 +182,7 @@ function Dashboard(props) {
 
                 </Drawer>
                 <Main open={open} sx={{ overflowY: "scroll" }}>
-                    <Box sx={{ display: "flex", pt: 6 }}>
+                    <Box sx={{ display: "flex", pt: 8 }}>
                         <Tooltip title="Click here to access dashboard menu" placement="right" arrow>
                             <IconButton
                                 color="inherit"
@@ -191,7 +191,7 @@ function Dashboard(props) {
                                 edge="start"
                                 sx={{ mr: 0, ...(open && { visibility: 'hidden' }) }}
                             >
-                                <MoreHorizTwoToneIcon />
+                                < MenuIcon />
                             </IconButton>
                         </Tooltip>
 

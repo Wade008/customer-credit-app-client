@@ -121,6 +121,17 @@ function App() {
 
   }, [store.token, customers, currentUser])
 
+  useEffect(() => {
+    // const username = localStorage.getItem("username")
+    const token = localStorage.getItem("token")
+    if (token) {
+      dispatch({
+        type: "setToken",
+        data: token,
+      })
+    }
+  }, [])
+
 
   //update user info - this is a centralised axios function to deal with updating user details and store credit value 
 
@@ -304,16 +315,7 @@ function App() {
       </Route >
     )
   )
-  useEffect(() => {
-    // const username = localStorage.getItem("username")
-    const token = localStorage.getItem("token")
-    if (token) {
-      dispatch({
-        type: "setToken",
-        data: token,
-      })
-    }
-  }, [])
+  
 
   return (
 
