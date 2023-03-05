@@ -5,8 +5,6 @@ import axios from "axios";
 
 import App from './App';
 
-const local_host = "http://localhost:5000";
-
 const remote_host = "https://customer-credit-app-api-production-d09b.up.railway.app"
 
 axios.defaults.baseURL = remote_host;
