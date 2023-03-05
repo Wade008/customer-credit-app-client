@@ -120,11 +120,11 @@ function CustomerList(props) {
                 : <Box sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    pt: 2,
+                    pt: 3,
 
                 }}>
                     <Typography variant="subtitle2" textAlign="center" sx={{ color: "#333333" }}>
-                        {customers.length > 0 ? "You can find a customer by entering their first name, last name or email address" : `Oh no! You don't have any customers yet. You can add a customer via the Dashboard menu. Just click on the ${< MenuIcon />} at the top left of the dashboard. You can use the Daboard menu  to view/update your profile and to change the value of a credit point`}
+                        {customers.length > 0 ? "You can find a customer by entering their first name, last name or email address" : "Oh no! You don't have any customers yet. You can add a customer via the Dashboard menu. Just click on the menu icon at the top left of the Dashboard. You can also use the Dashboard menu to view/update your profile, update a customer's details and to change the value of a credit point"}
                     </Typography>
                 </Box>
 
