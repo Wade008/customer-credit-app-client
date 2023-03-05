@@ -16,9 +16,6 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { MultiBackground } from "./styled/CustomStyles";
-import MenuIcon from '@mui/icons-material/Menu';
-
-
 
 
 function CustomerList(props) {
