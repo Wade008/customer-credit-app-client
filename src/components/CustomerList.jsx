@@ -16,6 +16,7 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { MultiBackground } from "./styled/CustomStyles";
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 
@@ -123,7 +124,7 @@ function CustomerList(props) {
 
                 }}>
                     <Typography variant="subtitle2" textAlign="center" sx={{ color: "#333333" }}>
-                        {customers.length > 0 ? "You can find a customer by entering their first name, last name or email address" : "Oh no! You don't have any customers yet."}
+                        {customers.length > 0 ? "You can find a customer by entering their first name, last name or email address" : `Oh no! You don't have any customers yet. You can add a customer via the Dashboard menu. Just click on the ${< MenuIcon />} at the top left of the dashboard. You can use the Daboard menu  to view/update your profile and to change the value of a credit point`}
                     </Typography>
                 </Box>
 
