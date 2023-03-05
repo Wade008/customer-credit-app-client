@@ -53,7 +53,7 @@ export const HomeBackground = styled.section`
 
 
 export const MultiBackground = styled.section`
-    background: #dddddd;
+    background: #92B7B8;
     position: relative;
     min-height: 100vh;
 
