@@ -23,7 +23,8 @@ import { GlobalContext } from "./components/utils/globalStateContext";
 import globalReducer from "./components/reducers/globalReducer";
 import Global from "./components/styled/Global";
 import CustomerDetails from "./components/CustomerDetails";
-// import Message from "./components/Message";
+
+
 import axios from "axios";
 
 
@@ -37,16 +38,19 @@ function App() {
     token: "",
   }
 
-  const [store, dispatch] = useReducer(globalReducer, initialAuthState)
+
 
   const [customers, setCustomers] = useState([])
 
   const [currentUser, setCurrentUser] = useState({})
 
-  const [metrics, setMetrics] = useState({})
+  const [metrics, setMetrics] = useState([])
 
   const [message, setMessage] = useState("")
 
+
+
+  const [store, dispatch] = useReducer(globalReducer, initialAuthState)
 
   //empty state on logout
   const onExit = () => {
@@ -58,7 +62,7 @@ function App() {
 
     setCustomers([])
     setCurrentUser({})
-    setMetrics({})
+    setMetrics([])
   }
 
 
@@ -67,11 +71,14 @@ function App() {
     const getUser = async () => {
 
       try {
+
         const response = await axios.get("auth/profile")
         setCurrentUser(response.data)
+
       }
       catch (err) {
         setCurrentUser({})
+
         console.log(err)
       }
     }
@@ -79,19 +86,24 @@ function App() {
 
     const getCustomers = async () => {
       try {
+
         const response = await axios.get("/customers")
         setCustomers(response.data)
+
       }
       catch (err) {
         setCustomers([])
+
         console.log(err)
       }
     }
 
     if (store.token) {
 
+
       getUser();
       getCustomers();
+
 
     }
   }, [store.token])
@@ -104,33 +116,29 @@ function App() {
     const getMetrics = async () => {
 
       try {
+
         const response = await axios.get("/metrics")
+  
         setMetrics(response.data)
-        console.log(response.data)
+       
+
 
       }
       catch (err) {
-        setMetrics({})
+        setMetrics([])
+
         console.log(err)
       }
     }
 
     if (store.token) {
+
       getMetrics();
+      
+
     }
 
   }, [store.token, customers, currentUser])
-
-  useEffect(() => {
-    // const username = localStorage.getItem("username")
-    const token = localStorage.getItem("token")
-    if (token) {
-      dispatch({
-        type: "setToken",
-        data: token,
-      })
-    }
-  }, [])
 
 
   //update user info - this is a centralised axios function to deal with updating user details and store credit value 
@@ -138,6 +146,7 @@ function App() {
   const updateCurrentUser = async (userDetails) => {
 
     try {
+
       const response = await axios.put("auth/profile", userDetails);
       // console.log(response.data?.error)
       //check if error message before updating state
@@ -154,6 +163,7 @@ function App() {
     }
     catch (err) {
       // console.log(err)
+
       setMessage("An error has occurred. Please try again")
     }
   }
@@ -164,6 +174,7 @@ function App() {
   const updateUser = (userDetails) => {
 
     updateCurrentUser(userDetails)
+
   }
 
   //update store credit value - also stored in the user collection
@@ -175,6 +186,7 @@ function App() {
       ...currentDetails,
       ...{ creditvalue: newCredit }
     }
+
     updateCurrentUser(updatedUser)
 
   }
@@ -183,24 +195,32 @@ function App() {
   //delete a user
 
   const deleteUser = async () => {
+
     setMessage("")
     try {
-      const response = await axios.delete("auth/profile")
 
+      const response = await axios.delete("auth/profile")
+      console.log(response)
       setMessage("You have successfully deleted your account. Sorry to see you go.")
+
       onExit();
     }
     catch (err) {
+
       setMessage("An error has occurred. Please try again")
     }
+
+
 
   }
 
 
 
   const addCustomer = async (customer) => {
+
     setMessage("")
     try {
+
       const response = await axios.post("/customers", customer)
 
       setCustomers((prevCustomers) => {
@@ -209,22 +229,27 @@ function App() {
           response.data]
       }
       )
+
       setMessage("Customer successfully added to the system")
 
     }
     catch (err) {
+
       setMessage("An error has occurred. Please try again")
 
     }
+
 
   }
 
   //update customer
 
   const updateCustomer = async (custId, updatedDetails) => {
+
     setMessage("")
 
     try {
+
       const response = await axios.put(`customers/${custId}`, updatedDetails)
 
       // console.log(updatedDetails.data)
@@ -241,11 +266,15 @@ function App() {
       // console.log(newCustomers)
       // update customers state to match the update
       setCustomers(newCustomers);
+
       setMessage("Customer details updated successfully");
     }
     catch (err) {
+
       setMessage("An error has occurred. Please try again")
     }
+
+
 
   }
 
@@ -254,6 +283,7 @@ function App() {
   const deleteCustomer = async (custId) => {
 
     try {
+
       const response = await axios.delete(`customers/${custId}`)
 
       let newCustomers = customers.filter((customer) => {
@@ -261,10 +291,12 @@ function App() {
       })
 
       setCustomers(newCustomers);
+
       setMessage("Customer has been deleted from the system");
 
     }
     catch (err) {
+
       setMessage("An error has occurred. Please try again")
     }
 
@@ -274,18 +306,18 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/" element={<Main onExit={onExit} />} errorElement={<NotFound />} >
-        <Route path="/" element={<Home message={message} setMessage={setMessage} />} />
-        <Route path="login" element={<Login />} />
+        path="/" element={<Main onExit={onExit} />} errorElement={<NotFound />}>
+
+        <Route path="login" element={<Login s />} />
         <Route path="register" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<Dashboard
             customers={customers}
-            storeCredit={currentUser.creditvalue}
             currentUser={currentUser}
             message={message}
             setMessage={setMessage}
-            metrics={metrics} />} />
+            metrics={metrics}
+          />} />
           <Route path="dashboard/profile" element={<Profile
             currentUser={currentUser}
             updateUser={updateUser}
@@ -311,11 +343,12 @@ function App() {
           />
         </Route>
 
+        <Route path="/" element={<Home message={message} setMessage={setMessage} />} />
 
       </Route >
     )
   )
-  
+
 
   return (
 

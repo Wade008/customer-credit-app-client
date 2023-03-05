@@ -24,6 +24,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 function Register() {
 
+
+
     const initialFormState = {
         firstname: "",
         lastname: "",
@@ -68,6 +70,7 @@ function Register() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+      
         axios
             .post("/auth/register", newUser)
             .then((res) => res.data)
@@ -85,6 +88,7 @@ function Register() {
                         apiError: "Username already taken"
                     }
                 })
+               
                 console.log(errorMessage)
 
             })

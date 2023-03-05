@@ -33,6 +33,7 @@ import PeopleAltTwoToneIcon from '@mui/icons-material/PeopleAltTwoTone';
 import MenuIcon from '@mui/icons-material/Menu';
 
 
+
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -57,7 +58,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 
 function Dashboard(props) {
 
-    const { customers, storeCredit, currentUser, message, setMessage, metrics } = props;
+    const { customers, currentUser, message, setMessage, metrics } = props;
 
     const [open, setOpen] = useState(false);
 
@@ -123,11 +124,15 @@ function Dashboard(props) {
 
     // prepare key metrics array - add icons interatively
 
-    const icons = [< PeopleAltTwoToneIcon />, < CardMembershipTwoToneIcon />, < MonetizationOnTwoToneIcon />]
+  
+        const icons = [< PeopleAltTwoToneIcon />, < CardMembershipTwoToneIcon />, < MonetizationOnTwoToneIcon />]
 
-    let keyMetrics = metrics.map((metric, index) => {
-        return { ...metric, icon: icons[index] }
-    })
+        let keyMetrics = metrics.map((metric, index) => {
+            return { ...metric, icon: icons[index] }
+        })
+
+
+
 
 
     const drawer = (
@@ -153,6 +158,7 @@ function Dashboard(props) {
 
     return (
         <MultiBackground>
+
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
 
@@ -201,7 +207,7 @@ function Dashboard(props) {
                         {storeName}
                     </Box>
                     <Box sx={{ textAlign: 'right', fontSize: "16px", color: "#333333" }}>
-                        The value of one credit point is: ${storeCredit}
+                        The value of one credit point is: ${currentUser.creditvalue}
                     </Box>
                     <Divider />
                     <Box display="flex" sx={{ flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
@@ -244,6 +250,7 @@ function Dashboard(props) {
                 </Main>
 
             </Box>
+
         </MultiBackground>
     )
 }

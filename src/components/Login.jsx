@@ -18,7 +18,7 @@ import axios from "axios";
 
 function Login() {
 
-  
+
 
     const initialUserState = {
         username: "",
@@ -47,7 +47,7 @@ function Login() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-
+  
         axios
             .post("/auth/login", user)
             .then((res) => res.data)
@@ -64,7 +64,6 @@ function Login() {
                         apiError: "Username/password is incorrect"
                     }
                 })
-
             })
     };
 
@@ -97,7 +96,7 @@ function Login() {
                 <Avatar sx={{ m: 1 }}>
                     <VpnKeyTwoToneIcon />
                 </Avatar>
-                {store.token ?  navigate("/dashboard"):
+                {store.token ? navigate("/dashboard") :
                     <>
                         <Typography component="h1" variant="h5" sx={{ p: 2 }} >
                             Login
