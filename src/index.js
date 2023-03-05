@@ -5,9 +5,11 @@ import axios from "axios";
 
 import App from './App';
 
-const remote_host = "https://customer-credit-app-api-production-d09b.up.railway.app"
+// const remote_host = "https://customer-credit-app-api-production-d09b.up.railway.app"
 
-axios.defaults.baseURL = remote_host;
+const local_host = "http://localhost:5000";
+
+axios.defaults.baseURL = local_host;
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token")
